@@ -25,6 +25,6 @@ vide().
 % emplacement(X,Y,Z):- X>=1, X=<4, Y>=1, Y=<4, functor(Z, piece, 4).
 
 % autre solution qui permet de bien vérifier que la pièce est valide, mais on doit passer une liste à pièce du coup :
-emplacement(X,Y,Z):- X>=1, X=<4, Y>=1, Y=<4, piece(Z). %functor(Z, piece, 4), arg(1, Z, grande), arg(2, Z, carre), arg(3, Z, creux), arg(4, Z, noir). 
-emplacement(X,Y,Z):- X>=1, X=<4, Y>=1, Y=<4, functor(Z, vide, 0).
+%emplacement(X,Y,Z):- X>=1, X=<4, Y>=1, Y=<4, piece(Z). %functor(Z, piece, 4), arg(1, Z, grande), arg(2, Z, carre), arg(3, Z, creux), arg(4, Z, noir). 
+%emplacement(X,Y,Z):- X>=1, X=<4, Y>=1, Y=<4, functor(Z, vide, 0).
 
