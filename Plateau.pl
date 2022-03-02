@@ -22,6 +22,6 @@ quatuorDePieces(P1,P2,P3,P4):- piece(P1),piece(P2),piece(P3),piece(P4).
 verifAlignement(P1,P2,P3,P4,Ind):- quatuorDePieces(P1,P2,P3,P4),nth1(Ind,P1,Carac),nth1(Ind,P2,Carac),nth1(Ind,P3,Carac),nth1(Ind,P4,Carac).%, NewInd is Ind+1, verifAlignement(P1,P2,P3,P4,NewInd).
 
 %ÉCRIRE TOUS LES CAS DE VICTOIRE ICI
-
+verifVictoire(Plateau):- verifAlignement(nth1(1,Plateau,P1),nth1(2,Plateau,P1),nth1(3,Plateau,P1),nth1(4,Plateau,P1),1)
 verifVictoire(Plateau):- write("Pas de victoire"),jouer(Plateau). %dernier cas, il n'y a pas de victoire
 
