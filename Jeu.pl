@@ -1,18 +1,19 @@
 :- include('Pieces.pl').
+:- include('AffichagePlateau.pl').
 
 % Initialise le plateau de jeu, et lance le premier tour de jeu
 installerJeu():- jouer([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide()]).
 
 % Fait un tour de jeu : sélection de pièce par J1, placement de la pièce par J2 et vérification s'il y a victoire ou non
-jouer(Plateau):-selectPiece(P,Plateau),placerPiece(P,Plateau,NouveauPlateau),verifVictoire(NouveauPlateau).
+jouer(Plateau):- nl, afficherPlateau(Plateau,0), nl, selectPiece(P,Plateau),placerPiece(P,Plateau,NouveauPlateau),verifVictoire(NouveauPlateau).
 
 % Sélection de la pièce par J1
-selectPiece(P,Plateau):- repeat,write("Sélectionnez une pièce pour votre adversaire"),read(P),pieceSelectionnable(P,Plateau).
+selectPiece(P,Plateau):- repeat, nl, write("Sélectionnez une pièce pour votre adversaire :"), nl, read(P), pieceSelectionnable(P,Plateau).
 % Vérifie que la sélection correspond à une pièce, qui n'est pas déjà sur le plateau. 
 pieceSelectionnable(P,Plateau):- piece(P), not(memberchk(P, Plateau)).
 
 % Placement d'une pièce par J2 sur le plateau (donne lieu à un nouveau plateau)
-placerPiece(P,Plateau,NouveauPlateau):- repeat,write("Choisissez la ligne"),read(X),write("Choisissez la colonne"),read(Y), Ind is (X-1)*4+Y, nth1(Ind,Plateau,vide()),changerElemListe(Ind,P,Plateau,NouveauPlateau).
+placerPiece(P,Plateau,NouveauPlateau):- repeat,write("Choisissez la ligne"), nl, read(X), write("Choisissez la colonne"), nl, read(Y), Ind is (X-1)*4+Y, nth1(Ind,Plateau,vide()),changerElemListe(Ind,P,Plateau,NouveauPlateau).
 
 % Change l'élément placé à l'indice Ind dans la liste [T|Q] en Elem
 changerElemListe(1,Elem,[_|Q],[Elem|Q]).
@@ -30,24 +31,24 @@ verifAlignement(P1,P2,P3,P4):- quatuorDePieces(P1,P2,P3,P4),nth1(3,P1,Interieur)
 verifAlignement(P1,P2,P3,P4):- quatuorDePieces(P1,P2,P3,P4),nth1(4,P1,Couleur),nth1(4,P2,Couleur),nth1(4,P3,Couleur),nth1(4,P4,Couleur).
 
 % Vérifie si il y a 4 pièces en ligne avec une caractéristique commune
-verifLignes(Plateau):- verifAlignement(nth1(1,Plateau,P1),nth1(2,Plateau,P2),nth1(3,Plateau,P3),nth1(4,Plateau,P4)).
-verifLignes(Plateau):- verifAlignement(nth1(5,Plateau,P1),nth1(6,Plateau,P2),nth1(7,Plateau,P3),nth1(8,Plateau,P4)).
-verifLignes(Plateau):- verifAlignement(nth1(9,Plateau,P1),nth1(10,Plateau,P2),nth1(11,Plateau,P3),nth1(12,Plateau,P4)).
-verifLignes(Plateau):- verifAlignement(nth1(13,Plateau,P1),nth1(14,Plateau,P2),nth1(15,Plateau,P3),nth1(16,Plateau,P4)).
+verifLignes(Plateau):- nth1(1,Plateau,P1),nth1(2,Plateau,P2),nth1(3,Plateau,P3),nth1(4,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifLignes(Plateau):- nth1(5,Plateau,P1),nth1(6,Plateau,P2),nth1(7,Plateau,P3),nth1(8,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifLignes(Plateau):- nth1(9,Plateau,P1),nth1(10,Plateau,P2),nth1(11,Plateau,P3),nth1(12,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifLignes(Plateau):- nth1(13,Plateau,P1),nth1(14,Plateau,P2),nth1(15,Plateau,P3),nth1(16,Plateau,P4),verifAlignement(P1,P2,P3,P4).
 
 % Vérifie si il y a 4 pièces en colonne avec une caractéristique commune
-verifColonnes(Plateau):- verifAlignement(nth1(1,Plateau,P1),nth1(5,Plateau,P2),nth1(9,Plateau,P3),nth1(13,Plateau,P4)).
-verifColonnes(Plateau):- verifAlignement(nth1(2,Plateau,P1),nth1(6,Plateau,P2),nth1(10,Plateau,P3),nth1(14,Plateau,P4)).
-verifColonnes(Plateau):- verifAlignement(nth1(3,Plateau,P1),nth1(7,Plateau,P2),nth1(11,Plateau,P3),nth1(15,Plateau,P4)).
-verifColonnes(Plateau):- verifAlignement(nth1(4,Plateau,P1),nth1(8,Plateau,P2),nth1(12,Plateau,P3),nth1(16,Plateau,P4)).
+verifColonnes(Plateau):- nth1(1,Plateau,P1),nth1(5,Plateau,P2),nth1(9,Plateau,P3),nth1(13,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifColonnes(Plateau):- nth1(2,Plateau,P1),nth1(6,Plateau,P2),nth1(10,Plateau,P3),nth1(14,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifColonnes(Plateau):- nth1(3,Plateau,P1),nth1(7,Plateau,P2),nth1(11,Plateau,P3),nth1(15,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifColonnes(Plateau):- nth1(4,Plateau,P1),nth1(8,Plateau,P2),nth1(12,Plateau,P3),nth1(16,Plateau,P4),verifAlignement(P1,P2,P3,P4).
 
 % Vérifie si il y a 4 pièces en diagonale avec une caractéristique commune
-verifDiagonales(Plateau):- verifAlignement(nth1(1,Plateau,P1),nth1(6,Plateau,P2),nth1(11,Plateau,P3),nth1(16,Plateau,P4)).
-verifDiagonales(Plateau):- verifAlignement(nth1(4,Plateau,P1),nth1(7,Plateau,P2),nth1(10,Plateau,P3),nth1(13,Plateau,P4)).
+verifDiagonales(Plateau):- nth1(1,Plateau,P1),nth1(6,Plateau,P2),nth1(11,Plateau,P3),nth1(16,Plateau,P4),verifAlignement(P1,P2,P3,P4).
+verifDiagonales(Plateau):- nth1(4,Plateau,P1),nth1(7,Plateau,P2),nth1(10,Plateau,P3),nth1(13,Plateau,P4),verifAlignement(P1,P2,P3,P4).
 
 % Vérifie si il y a une condition de victoire remplie sur le plateau, et relance un tour de jeu si ce n'est pas le cas
-verifVictoire(Plateau):- verifLignes(Plateau).
-verifVictoire(Plateau):- verifColonnes(Plateau).
-verifVictoire(Plateau):- verifDiagonales(Plateau).
+verifVictoire(Plateau):- verifLignes(Plateau), nl, write("Victoire sur la ligne !").
+verifVictoire(Plateau):- verifColonnes(Plateau), nl, write("Victoire sur la colonne !").
+verifVictoire(Plateau):- verifDiagonales(Plateau), nl, write("Victoire sur la diagonale !").
 verifVictoire(Plateau):- write("Pas de victoire"),jouer(Plateau). %dernier cas, il n'y a pas de victoire
 
