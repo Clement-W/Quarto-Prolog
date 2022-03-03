@@ -1,0 +1,1 @@
+score(Plateau,Piece,Score):-

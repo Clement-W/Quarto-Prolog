@@ -1,14 +1,19 @@
 :- include('Pieces.pl').
 :- include('AffichagePlateau.pl').
+:- include('AffichageAccueil.pl').
+
+demarrer():- afficherTexteAccueil(), nl, repeat, write("Choisissez vote mode de jeu en entrant (1)"), nl, write("[1] : Humain contre Humain"), nl, read(ChoixMode), lancerMode(ChoixMode).
+
+lancerMode(1):- jouerHvsH([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide()]).
 
 % Initialise le plateau de jeu, et lance le premier tour de jeu
-installerJeu():- jouer([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide()]).
+%installerJeu():- jouer([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide()]).
 
 % Fait un tour de jeu : sélection de pièce par J1, placement de la pièce par J2 et vérification s'il y a victoire ou non
-jouer(Plateau):- nl, afficherPlateau(Plateau,0), nl, selectPiece(P,Plateau),placerPiece(P,Plateau,NouveauPlateau),verifVictoire(NouveauPlateau).
+jouerHvsH(Plateau):- nl, afficherPlateau(Plateau,0), nl, selectPiece(P,Plateau),placerPiece(P,Plateau,NouveauPlateau),verifVictoire(NouveauPlateau).
 
 % Sélection de la pièce par J1
-selectPiece(P,Plateau):- repeat, nl, write("Sélectionnez une pièce pour votre adversaire :"), nl, read(P), pieceSelectionnable(P,Plateau).
+selectPiece(P,Plateau):- repeat, nl, write("Selectionnez une piece pour votre adversaire :"), nl, read(P), pieceSelectionnable(P,Plateau).
 % Vérifie que la sélection correspond à une pièce, qui n'est pas déjà sur le plateau. 
 pieceSelectionnable(P,Plateau):- piece(P), not(memberchk(P, Plateau)).
 

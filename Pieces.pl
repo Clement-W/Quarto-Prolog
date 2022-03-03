@@ -1,6 +1,6 @@
 %Caractéristiques possibles des pièces
-taille(grande).
-taille(petite).
+taille(grand).
+taille(petit).
 
 forme(carre).
 forme(rond).
