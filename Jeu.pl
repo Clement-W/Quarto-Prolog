@@ -2,7 +2,7 @@
 :- include('AffichagePlateau.pl').
 :- include('AffichageAccueil.pl').
 
-demarrer():- afficherTexteAccueil(), nl, repeat, write("Choisissez vote mode de jeu en entrant (1)"), nl, write("[1] : Humain contre Humain"), nl, read(ChoixMode), lancerMode(ChoixMode).
+demarrer():- afficherTitre(), nl, afficherTexteAccueil(), nl, repeat, write("Choisissez vote mode de jeu en entrant (1)"), nl, write("[1] : Humain contre Humain"), nl, read(ChoixMode), lancerMode(ChoixMode).
 
 lancerMode(1):- jouerHvsH([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide()]).
 
@@ -10,7 +10,7 @@ lancerMode(1):- jouerHvsH([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide
 %installerJeu():- jouer([vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide(),vide()]).
 
 % Fait un tour de jeu : sélection de pièce par J1, placement de la pièce par J2 et vérification s'il y a victoire ou non
-jouerHvsH(Plateau):- nl, afficherPlateau(Plateau,0), nl, selectPiece(P,Plateau),placerPiece(P,Plateau,NouveauPlateau),verifVictoire(NouveauPlateau).
+jouerHvsH(Plateau):- nl, afficherPlateau(Plateau,0), nl, selectPiece(P,Plateau), placerPiece(P,Plateau,NouveauPlateau), verifVictoire(NouveauPlateau,1).
 
 % Sélection de la pièce par J1
 selectPiece(P,Plateau):- repeat, nl, write("Selectionnez une piece pour votre adversaire :"), nl, read(P), pieceSelectionnable(P,Plateau).
@@ -52,8 +52,10 @@ verifDiagonales(Plateau):- nth1(1,Plateau,P1),nth1(6,Plateau,P2),nth1(11,Plateau
 verifDiagonales(Plateau):- nth1(4,Plateau,P1),nth1(7,Plateau,P2),nth1(10,Plateau,P3),nth1(13,Plateau,P4),verifAlignement(P1,P2,P3,P4).
 
 % Vérifie si il y a une condition de victoire remplie sur le plateau, et relance un tour de jeu si ce n'est pas le cas
-verifVictoire(Plateau):- verifLignes(Plateau), nl, write("Victoire sur la ligne !").
-verifVictoire(Plateau):- verifColonnes(Plateau), nl, write("Victoire sur la colonne !").
-verifVictoire(Plateau):- verifDiagonales(Plateau), nl, write("Victoire sur la diagonale !").
-verifVictoire(Plateau):- write("Pas de victoire"),jouer(Plateau). %dernier cas, il n'y a pas de victoire
+verifVictoire(Plateau,_):- verifLignes(Plateau), nl, write("Victoire sur la ligne !").
+verifVictoire(Plateau,_):- verifColonnes(Plateau), nl, write("Victoire sur la colonne !").
+verifVictoire(Plateau,_):- verifDiagonales(Plateau), nl, write("Victoire sur la diagonale !").
+%Cas où il n'y a pas de victoire
+%Cas où le mode de jeu est Humain contre Humain
+verifVictoire(Plateau,1):- write("Pas de victoire"),jouerHvsH(Plateau). %dernier cas, il n'y a pas de victoire
 

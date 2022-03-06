@@ -6,19 +6,19 @@ afficherPlateau(Plateau, Ind):- write(" | "),Case1 is Ind*4+1, nth1(Case1,Platea
 
 % Permet d'afficher le contenu de chaque case possible du plateau
 afficherCase(vide()):- write("    ").
-afficherCase([grande, carre, creux, blanc]):- write("gccb").
-afficherCase([grande, carre, creux, noir]):- write("gccn").
-afficherCase([grande, carre, plein, blanc]):- write("gcpb").
-afficherCase([grande, carre, plein, noir]):- write("gcpn").
-afficherCase([grande, rond, creux, blanc]):- write("grcb").
-afficherCase([grande, rond, creux, noir]):- write("grcn").
-afficherCase([grande, rond, plein, blanc]):- write("grpb").
-afficherCase([grande, rond, plein, noir]):- write("grpn").
-afficherCase([petit,carre,creux,blanc]) :- write("pccb").
-afficherCase([petit,carre,creux,noir]):- write("pccn").
-afficherCase([petit,carre,plein,blanc]):- write("pcpb").
-afficherCase([petit,carre,plein,noir]):- write("pcpn").
-afficherCase([petit,rond,creux,blanc]):- write("prcb").
-afficherCase([petit,rond,creux,noir]):- write("prcn").
-afficherCase([petit,rond,plein,blanc]):- write("prpb").
-afficherCase([petit,rond,plein,noir]):- write("prpn").
+afficherCase([grand, carre, creux, blanc]):- write("gccb").
+afficherCase([grand, carre, creux, noir]):- write("gccn").
+afficherCase([grand, carre, plein, blanc]):- write("gcpb").
+afficherCase([grand, carre, plein, noir]):- write("gcpn").
+afficherCase([grand, rond, creux, blanc]):- write("grcb").
+afficherCase([grand, rond, creux, noir]):- write("grcn").
+afficherCase([grand, rond, plein, blanc]):- write("grpb").
+afficherCase([grand, rond, plein, noir]):- write("grpn").
+afficherCase([petit, carre, creux, blanc]) :- write("pccb").
+afficherCase([petit, carre, creux, noir]):- write("pccn").
+afficherCase([petit, carre, plein, blanc]):- write("pcpb").
+afficherCase([petit, carre, plein, noir]):- write("pcpn").
+afficherCase([petit, rond, creux, blanc]):- write("prcb").
+afficherCase([petit, rond, creux, noir]):- write("prcn").
+afficherCase([petit, rond, plein, blanc]):- write("prpb").
+afficherCase([petit, rond, plein, noir]):- write("prpn").
