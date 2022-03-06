@@ -24,7 +24,7 @@ placerPiece(P,Plateau,NouveauPlateau):- nl, write("A l'autre joueur de jouer."),
 changerElemListe(1,Elem,[_|Q],[Elem|Q]).
 changerElemListe(Ind,Elem,[T|Q],L2):- append([T],L1,L2),Ind2 is Ind-1,changerElemListe(Ind2,Elem,Q,L1).
 
-%Vérifie que les 4 entrées sont bien des pièces
+%Vérifie que les 4 entrées sont bien des pièces (donc que ça ne comprte aucun vide())
 quatuorDePieces(P1,P2,P3,P4):- piece(P1),piece(P2),piece(P3),piece(P4).
 
 % Vérifie que les 4 entrées sont bien des pièces et ont une caractéristique en commun
