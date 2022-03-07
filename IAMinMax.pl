@@ -8,6 +8,9 @@ creationNouveauNoeud(P,Ind,Plateau,NouveauPlateau):- nth1(Ind,Plateau,vide()),ch
 changerElemListe(1,Elem,[_|Q],[Elem|Q]).
 changerElemListe(Ind,Elem,[T|Q],L2):- append([T],L1,L2),Ind2 is Ind-1,changerElemListe(Ind2,Elem,Q,L1).
 
+% TODO: savoir s'il faut juste répeter vide(). ou importer Piece.pl
+vide().
+
 score(Plateau, Score) :-
     evaluerLignes(Plateau, ScoreLignes),
     evaluerColonnes(Plateau, ScoreColonnes),
@@ -167,7 +170,23 @@ creationNouveauNoeud(P,Ind,Plateau,NouveauPlateau):- nth1(Ind,Plateau,vide()),ch
 
 creationNouveauNiveau(Plateau, ListeCasesRestantes, ListesPiecesRestantes, ListeScores, ListeScoresActualisee):-  length(ListesPiecesRestantes, NbPiecesRestantes), creationNoeudDuNiveau(1, NbPiecesRestantes).
 
-creationNoeudDuNiveau(NumeroMax, NumeroMax):- creationNouveauNiveau().
-creationNoeudDuNiveau(Numero, NumeroMax):- creationNouveauNiveau() ,NumeroSuivant is Numero+1, creationNoeudDuNiveau(NumeroSuivant, NumeroMax). 
+%Cas d'arrêt : profondeur maximale et fin de niveau
+creationNoeudDuNiveau(NoeudPlateau, _, ScoreNoeudPrecedent, MinOuMax, ProfondeurMax, ProfondeurMax, NumeroMax, NumeroMax):- ScoreNoeudPrecedent is score(NoeudPlateau).
+
+%Cas profondeur maximale : 
+    % on veut maximiser le score du noeud précédent (MinOrMax == 1) et ce noeud a un score plus grand 
+creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedent, MinOuMax, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax):- ScoreNoeud is score(NoeudPlateau), MinOuMax == 1, ScoreNoeud > ScoreNoeudPrecedentActuel, ScoreNoeudPrecedent is ScoreNoeud, NumeroSuivant is Numero+1, changerElemListe(IndPiece, vide(), NoeudPlateau, NoeudPlateauIntermediaire), IndSuivantListeCasesRestantes is IndListeCasesRestantes+1, nth1(IndSuivantListeCasesRestantes, ListeCasesRestantes, IndSuivantPiece), changerElemListe(IndSuivantPiece, PieceTestee, NoeudPlateauIntermediaire, NoeudPlateauSuivant), creationNoeudDuNiveau(NoeudPlateauSuivant, PieceTestee, ScoreNoeudPrecedentActuel, MinOuMax,ListeCasesRestantes, IndSuivantListeCasesRestantes, IndSuivantPiece, ProfondeurMax, ProfondeurMax, NumeroSuivant, NumeroMax).
+    % on veut maximiser le score du noeud précédent (MinOrMax == 1) et ce noeud a un score plus petit 
+creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedent, MinOuMax, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax):- ScoreNoeud is score(NoeudPlateau), MinOuMax == 1, ScoreNoeud < ScoreNoeudPrecedentActuel, ScoreNoeudPrecedent is ScoreNoeudPrecedentActuel, NumeroSuivant is Numero+1, changerElemListe(IndPiece, vide(), NoeudPlateau, NoeudPlateauIntermediaire), IndSuivantListeCasesRestantes is IndListeCasesRestantes+1, nth1(IndSuivantListeCasesRestantes, ListeCasesRestantes, IndSuivantPiece), changerElemListe(IndSuivantPiece, PieceTestee, NoeudPlateauIntermediaire, NoeudPlateauSuivant), creationNoeudDuNiveau(NoeudPlateauSuivant, PieceTestee, ScoreNoeudPrecedentActuel, MinOuMax,ListeCasesRestantes, IndSuivantListeCasesRestantes, IndSuivantPiece, ProfondeurMax, ProfondeurMax, NumeroSuivant, NumeroMax).
+    % on veut minimiser le score du noeud précédent (MinOrMax == 0) et ce noeud a un score plus petit 
+creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedent, MinOuMax, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax):- ScoreNoeud is score(NoeudPlateau), MinOuMax == 0, ScoreNoeud < ScoreNoeudPrecedentActuel, ScoreNoeudPrecedent is ScoreNoeud, NumeroSuivant is Numero+1, changerElemListe(IndPiece, vide(), NoeudPlateau, NoeudPlateauIntermediaire), IndSuivantListeCasesRestantes is IndListeCasesRestantes+1, nth1(IndSuivantListeCasesRestantes, ListeCasesRestantes, IndSuivantPiece), changerElemListe(IndSuivantPiece, PieceTestee, NoeudPlateauIntermediaire, NoeudPlateauSuivant), creationNoeudDuNiveau(NoeudPlateauSuivant, PieceTestee, ScoreNoeudPrecedentActuel, MinOuMax,ListeCasesRestantes, IndSuivantListeCasesRestantes, IndSuivantPiece, ProfondeurMax, ProfondeurMax, NumeroSuivant, NumeroMax).
+    % on veut minimiser le score du noeud précédent (MinOrMax == 0) et ce noeud a un score plus grand 
+creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedent, MinOuMax, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax):- ScoreNoeud is score(NoeudPlateau), MinOuMax == 0, ScoreNoeud > ScoreNoeudPrecedentActuel, ScoreNoeudPrecedent is ScoreNoeudPrecedentActuel, NumeroSuivant is Numero+1, changerElemListe(IndPiece, vide(), NoeudPlateau, NoeudPlateauIntermediaire), IndSuivantListeCasesRestantes is IndListeCasesRestantes+1, nth1(IndSuivantListeCasesRestantes, ListeCasesRestantes, IndSuivantPiece), changerElemListe(IndSuivantPiece, PieceTestee, NoeudPlateauIntermediaire, NoeudPlateauSuivant), creationNoeudDuNiveau(NoeudPlateauSuivant, PieceTestee, ScoreNoeudPrecedentActuel, MinOuMax,ListeCasesRestantes, IndSuivantListeCasesRestantes, IndSuivantPiece, ProfondeurMax, ProfondeurMax, NumeroSuivant, NumeroMax).
+
+
+% TODO: Cas de profondeur non maximale et fin de niveau
+% TODO: cas de profondeur non maximale et non fin de niveau
+creationNoeudDuNiveau(NoeudPlateau, Profondeur, ProfondeurMax, NumeroMax, NumeroMax):- creationNouveauNiveau().
+creationNoeudDuNiveau(NoeudPlateau, Profondeur, ProfondeurMax, Numero, NumeroMax):- creationNouveauNiveau(), NumeroSuivant is Numero+1, creationNoeudDuNiveau(NumeroSuivant, NumeroMax). 
 % 2 cas d'arrêt : profondeur max atteinte ==> pas de nouveau niveau (pas d'avancement verticale), mais nouveau noeud (avancement horizontal)
 %                 Profondeur max et dernier noeud atteinte ==> pas de nouveau niveau (pas d'avancement verticale), pas de nouveau noeud (pas d'avancement horizontal)
