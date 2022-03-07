@@ -1,5 +1,5 @@
 minMax(NoeudPlateau, ScoreNoeud, 0, _, _):- ScoreNoeud is score(NoeudPlateau).
-minMax(NoeudPlateau, ScoreNoeud, _, _, _):- ScoreNoeud is score(NoeudPlateau), ScoreNoeud > 999.
+minMax(NoeudPlateau, ScoreNoeud, _, _, _):- ScoreNoeud is score(NoeudPlateau), ScoreNoeud > 999. %Peu-être pas pertinent
 minMax(NoeudPlateau, ScoreNoeud, Profondeur, PieceAJouer, IndPiece):- Profondeur > 0, NouvelleProfondeur is Profondeur -1, creationNouveauNoeud(PieceAJouer, IndPiece, NoeudPlateau, NouveauPlateau), minMax(NouveauPlateau, ScoreNoeud, NouvelleProfondeur, PieceAJouer, IndPiece).
 
 creationNouveauNoeud(P,Ind,Plateau,NouveauPlateau):- nth1(Ind,Plateau,vide()),changerElemListe(Ind,P,Plateau,NouveauPlateau).
@@ -158,3 +158,16 @@ listeCasesRestantes(Plateau,ListeCasesRestantes,16,ListeCasesRestantesComplete):
 listeCasesRestantes(_,ListeCasesRestantes,16,ListeCasesRestantes).
 listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- nth1(Ind,Plateau,vide()), append(ListeCasesRestantes,[Ind],NouvelleListeCasesRestantes), Ind2 is Ind+1, listeCasesRestantes(Plateau,NouvelleListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
 listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- Ind2 is Ind+1, listeCasesRestantes(Plateau, ListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
+
+% Bidouillage
+minMax(NoeudPlateau, ListeScoreNoeud, ListeScoreNoeudActualisee, 0, _, _):- ScoreNoeud is score(NoeudPlateau), append(ListeScoreNoeud, [ScoreNoeud], ListeScoreNoeudActualisee).
+minMax(NoeudPlateau, ScoreNoeud, Profondeur, PieceAJouer, IndPiece):- Profondeur > 0, NouvelleProfondeur is Profondeur -1, creationNouveauNoeud(PieceAJouer, IndPiece, NoeudPlateau, NouveauPlateau), minMax(NouveauPlateau, ScoreNoeud, NouvelleProfondeur, PieceAJouer, IndPiece).
+
+creationNouveauNoeud(P,Ind,Plateau,NouveauPlateau):- nth1(Ind,Plateau,vide()),changerElemListe(Ind,P,Plateau,NouveauPlateau). %Obsolète à cause des listes de choses restantes
+
+creationNouveauNiveau(Plateau, ListeCasesRestantes, ListesPiecesRestantes, ListeScores, ListeScoresActualisee):-  length(ListesPiecesRestantes, NbPiecesRestantes), creationNoeudDuNiveau(1, NbPiecesRestantes).
+
+creationNoeudDuNiveau(NumeroMax, NumeroMax):- creationNouveauNiveau().
+creationNoeudDuNiveau(Numero, NumeroMax):- creationNouveauNiveau() ,NumeroSuivant is Numero+1, creationNoeudDuNiveau(NumeroSuivant, NumeroMax). 
+% 2 cas d'arrêt : profondeur max atteinte ==> pas de nouveau niveau (pas d'avancement verticale), mais nouveau noeud (avancement horizontal)
+%                 Profondeur max et dernier noeud atteinte ==> pas de nouveau niveau (pas d'avancement verticale), pas de nouveau noeud (pas d'avancement horizontal)
