@@ -154,7 +154,7 @@ listeToutesLesPieces([[grand, carre, creux, blanc],[grand, carre, creux, noir],[
 
 listePiecesRestantes(Plateau,ListeToutesLesPieces,ListePiecesRestantes):- listeToutesLesPieces(ListeToutesLesPieces),subtract(ListeToutesLesPieces,Plateau,ListePiecesRestantes).
 
-listeCasesRestantes(Plateau,ListeCasesRestantes,16,ListeCasesRestantesComplete):- nth1(16,Plateau,vide()), append(ListeCasesRestantes,16,ListeCasesRestantesComplete).
-listeCasesRestantes(Plateau,ListeCasesRestantes,16,ListeCasesRestantes).
-listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- nth1(Ind,Plateau,vide()), append(ListeCasesRestantes,Ind,NouvelleListeCasesRestantes), Ind2 is Ind+1, ListeCasesRestantes(Plateau,NouvelleListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
-listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- Ind2 is Ind+1, ListeCasesRestantes(Plateau, ListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
+listeCasesRestantes(Plateau,ListeCasesRestantes,16,ListeCasesRestantesComplete):- nth1(16,Plateau,vide()), append(ListeCasesRestantes,[16],ListeCasesRestantesComplete).
+listeCasesRestantes(_,ListeCasesRestantes,16,ListeCasesRestantes).
+listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- nth1(Ind,Plateau,vide()), append(ListeCasesRestantes,[Ind],NouvelleListeCasesRestantes), Ind2 is Ind+1, listeCasesRestantes(Plateau,NouvelleListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
+listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- Ind2 is Ind+1, listeCasesRestantes(Plateau, ListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
