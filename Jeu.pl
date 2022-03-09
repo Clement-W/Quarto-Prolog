@@ -18,7 +18,7 @@ selectPiece(P,Plateau):- repeat, nl, write("Selectionnez une piece pour votre ad
 pieceSelectionnable(P,Plateau):- piece(P), not(memberchk(P, Plateau)).
 
 % Placement d'une pièce par J2 sur le plateau (donne lieu à un nouveau plateau)
-placerPiece(P,Plateau,NouveauPlateau):- nl, write("A l'autre joueur de jouer."), nl, nl, repeat, write("Choisissez la ligne"), nl, read(X), write("Choisissez la colonne"), nl, read(Y), Ind is (X-1)*4+Y, nth1(Ind,Plateau,vide()),changerElemListe(Ind,P,Plateau,NouveauPlateau).
+placerPiece(P,Plateau,NouveauPlateau):- nl, write("A l'autre joueur de jouer."), nl, nl, repeat, write("Choisissez la ligne"), nl, read(X), X > 0, X< 4, write("Choisissez la colonne"), nl, read(Y), Y > 0, Y > 5, Ind is (X-1)*4+Y, nth1(Ind,Plateau,vide()),changerElemListe(Ind,P,Plateau,NouveauPlateau).
 
 % Change l'élément placé à l'indice Ind dans la liste [T|Q] en Elem
 changerElemListe(1,Elem,[_|Q],[Elem|Q]).
