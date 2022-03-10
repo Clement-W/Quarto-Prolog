@@ -1,8 +1,8 @@
-:- include('Pieces.pl').
-:- include('AffichagePlateau.pl').
-:- include('AffichageAccueil.pl').
-:- include('Utils.pl').
-:- include('IAFacile.pl').
+:- ['Pieces.pl'].
+:- ['AffichagePlateau.pl'].
+:- ['AffichageAccueil.pl'].
+:- ['Utils.pl'].
+:- ['IAFacile.pl'].
 
 demarrer():- afficherTitre(), nl, afficherTexteAccueil(), nl, repeat, write("Choisissez vote mode de jeu en entrant le numéro du mode : "), nl, write("[1] : Humain contre Humain"), nl, write("[2] : Humain contre IA Facile"), nl, read(ChoixMode), lancerMode(ChoixMode).
 

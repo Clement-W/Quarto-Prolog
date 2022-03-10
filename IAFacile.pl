@@ -1,4 +1,4 @@
-:- include('Utils.pl').
+:- ['Utils.pl'].
 
 % IA qui choisit ses coups aléatoirements
 selectionnerPieceIAFacile(P, Plateau) :-

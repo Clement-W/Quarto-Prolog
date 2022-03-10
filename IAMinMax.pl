@@ -1,7 +1,7 @@
 %minMax(NoeudPlateau, ScoreNoeud, 0, _, _):- ScoreNoeud is score(NoeudPlateau).
 %minMax(NoeudPlateau, ScoreNoeud, _, _, _):- ScoreNoeud is score(NoeudPlateau), ScoreNoeud > 999. %Peu-être pas pertinent
 %minMax(NoeudPlateau, ScoreNoeud, Profondeur, PieceAJouer, IndPiece):- Profondeur > 0, NouvelleProfondeur is Profondeur -1, creationNouveauNoeud(PieceAJouer, IndPiece, NoeudPlateau, NouveauPlateau), minMax(NouveauPlateau, ScoreNoeud, NouvelleProfondeur, PieceAJouer, IndPiece).
-:- include('Utils.pl').
+:- ['Utils.pl'].
 
 minMax(Plateau, PieceASelectionner, _):- listePiecesRestantes(Plateau, ListePiecesRestantes),length(ListePiecesRestantes, NbPiecesRestantes), premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, 1, NbPiecesRestantes).
 minMax(Plateau, PieceAPlacer, IndPieceAJouer):- listePiecesRestantes(Plateau, ListePiecesRestantes), substract(ListePiecesRestantes, [PieceAPlacer], ListesPiecesRestantesSansLaPieceAPlacer) , length(ListesPiecesRestantesSansLaPieceAPlacer, NbPiecesRestantes), premierEtage(Plateau, ListesPiecesRestantesSansLaPieceAPlacer, PieceAPlacer, IndPieceAJouer, 1).
