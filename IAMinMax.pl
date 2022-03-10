@@ -1,15 +1,12 @@
 %minMax(NoeudPlateau, ScoreNoeud, 0, _, _):- ScoreNoeud is score(NoeudPlateau).
 %minMax(NoeudPlateau, ScoreNoeud, _, _, _):- ScoreNoeud is score(NoeudPlateau), ScoreNoeud > 999. %Peu-être pas pertinent
 %minMax(NoeudPlateau, ScoreNoeud, Profondeur, PieceAJouer, IndPiece):- Profondeur > 0, NouvelleProfondeur is Profondeur -1, creationNouveauNoeud(PieceAJouer, IndPiece, NoeudPlateau, NouveauPlateau), minMax(NouveauPlateau, ScoreNoeud, NouvelleProfondeur, PieceAJouer, IndPiece).
+:- include('Utils.pl').
 
 minMax(Plateau, PieceASelectionner, _):- listePiecesRestantes(Plateau, ListePiecesRestantes),length(ListePiecesRestantes, NbPiecesRestantes), premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, 1, NbPiecesRestantes).
 minMax(Plateau, PieceAPlacer, IndPieceAJouer):- listePiecesRestantes(Plateau, ListePiecesRestantes), substract(ListePiecesRestantes, [PieceAPlacer], ListesPiecesRestantesSansLaPieceAPlacer) , length(ListesPiecesRestantesSansLaPieceAPlacer, NbPiecesRestantes), premierEtage(Plateau, ListesPiecesRestantesSansLaPieceAPlacer, PieceAPlacer, IndPieceAJouer, 1).
 
 %premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, IndPieceRestante, NbPiecesRestantes):- nth1(IndPieceRestante, ListePiecesRestantes, PieceATester), creationNoeudDuNiveau().
-
-% Change l'élément placé à l'indice Ind dans la liste [T|Q] en Elem
-changerElemListe(1,Elem,[_|Q],[Elem|Q]).
-changerElemListe(Ind,Elem,[T|Q],L2):- append([T],L1,L2),Ind2 is Ind-1,changerElemListe(Ind2,Elem,Q,L1).
 
 % TODO: savoir s'il faut juste répeter vide(). ou importer Piece.pl
 vide().
@@ -137,34 +134,6 @@ evaluation(vide(), vide(), [_, _, _, X], [_, _, _, X], 2).
 
 % Cas où il est impossible de gagner avec l'alignement des 4 emplacements évalués
 evaluation(_, _, _, _, 0).
-
-%Ensemble des pièces
-piece1(1,[grand, carre, creux, blanc]).
-piece2(2,[grand, carre, creux, noir]).
-piece3(3,[grand, carre, plein, blanc]).
-piece4(4,[grand, carre, plein, noir]).
-piece5(5,[grand, rond, creux, blanc]).
-piece6(6,[grand, rond, creux, noir]).
-piece7(7,[grand, rond, plein, blanc]).
-piece8(8,[grand, rond, plein, noir]).
-piece9(9,[petit, carre, creux, blanc]).
-piece10(10,[petit, carre, creux, noir]).
-piece11(11,[petit, carre, plein, blanc]).
-piece12(12,[petit, carre, plein, noir]).
-piece13(13,[petit, rond, creux, blanc]).
-piece14(14,[petit, rond, creux, noir]).
-piece15(15,[petit, rond, plein, blanc]).
-piece16(16,[petit, rond, plein, noir]).
-
-listeToutesLesPieces([[grand, carre, creux, blanc],[grand, carre, creux, noir],[grand, carre, plein, blanc],[grand, carre, plein, noir],[grand, rond, creux, blanc],[grand, rond, creux, noir],[grand, rond, plein, blanc],[grand, rond, plein, noir],[petit, carre, creux, blanc],[petit, carre, creux, noir],[petit, carre, plein, blanc],[petit, carre, plein, noir],[petit, rond, creux, blanc],[petit, rond, creux, noir],[petit, rond, plein, blanc],[petit, rond, plein, noir]]).
-
-listePiecesRestantes(Plateau,ListePiecesRestantes):- listeToutesLesPieces(ListeToutesLesPieces),subtract(ListeToutesLesPieces,Plateau,ListePiecesRestantes).
-
-% Remarque : listeCasesRestantes doit être appelée avec ListeCasesRestantes=[] et Ind=1
-listeCasesRestantes(Plateau,ListeCasesRestantes,16,ListeCasesRestantesComplete):- nth1(16,Plateau,vide()), append(ListeCasesRestantes,[16],ListeCasesRestantesComplete).
-listeCasesRestantes(_,ListeCasesRestantes,16,ListeCasesRestantes).
-listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- nth1(Ind,Plateau,vide()), append(ListeCasesRestantes,[Ind],NouvelleListeCasesRestantes), Ind2 is Ind+1, listeCasesRestantes(Plateau,NouvelleListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
-listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- Ind2 is Ind+1, listeCasesRestantes(Plateau, ListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
 
 
 % Cas d'arrêt : profondeur maximale et fin de niveau
