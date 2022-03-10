@@ -41,7 +41,7 @@ afficherPlateau(Plateau, Ind) :-
     afficherPlateau(Plateau, Ind2).
 
 % Permet d'afficher le contenu de chaque case possible du plateau
-afficherCase(vide()) :-
+afficherCase(vide) :-
     write("    ").
 afficherCase([grand, carre, creux, blanc]) :-
     write("gccb").

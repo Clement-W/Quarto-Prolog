@@ -7,13 +7,13 @@ listePiecesRestantes(Plateau, ListePiecesRestantes) :-
     subtract(ListeToutesLesPieces, Plateau, ListePiecesRestantes).
 
 listeCasesRestantes(Plateau, ListeCasesRestantes, 16, ListeCasesRestantesComplete) :-
-    nth1(16, Plateau, vide()),
+    nth1(16, Plateau, vide),
     append(ListeCasesRestantes, [16], ListeCasesRestantesComplete).
 
 listeCasesRestantes(_, ListeCasesRestantes, 16, ListeCasesRestantes).
 
 listeCasesRestantes(Plateau, ListeCasesRestantes, Ind, ListeCasesRestantesComplete) :-
-    nth1(Ind, Plateau, vide()),
+    nth1(Ind, Plateau, vide),
     append(ListeCasesRestantes, [Ind], NouvelleListeCasesRestantes),
     Ind2 is Ind+1,
     listeCasesRestantes(Plateau, NouvelleListeCasesRestantes, Ind2, ListeCasesRestantesComplete).

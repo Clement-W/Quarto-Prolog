@@ -4,9 +4,11 @@
 :- ['Utils.pl'].
 :- ['Pieces.pl'].
 
+minMax(Plateau, PieceASelectionner, _):- listePiecesRestantes(Plateau, ListePiecesRestantes),length(ListePiecesRestantes, NbPiecesRestantes), premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, 1, NbPiecesRestantes).
+minMax(Plateau, PieceAPlacer, IndPieceAJouer):- listePiecesRestantes(Plateau, ListePiecesRestantes), substract(ListePiecesRestantes, [PieceAPlacer], ListesPiecesRestantesSansLaPieceAPlacer) , length(ListesPiecesRestantesSansLaPieceAPlacer, NbPiecesRestantes), premierEtage(Plateau, ListesPiecesRestantesSansLaPieceAPlacer, PieceAPlacer, IndPieceAJouer, 1).
+
 %premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, IndPieceRestante, NbPiecesRestantes):- nth1(IndPieceRestante, ListePiecesRestantes, PieceATester), creationNoeudDuNiveau().
 
-% TODO: savoir s'il faut juste répeter vide. ou importer Piece.pl
 score(Plateau, Score) :-
     evaluerLignes(Plateau, ScoreLignes),
     evaluerColonnes(Plateau, ScoreColonnes),
@@ -411,5 +413,3 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement
                           ProfondeurMax,
                           1,
                           NumeroMaxNiveauSuivant).
-
-%creationNoeudDuNiveau(Plateau, MeilleurPieceASelectionner, _, 1, ListeCasesRestantes, _, IndPiece, 0, ProfondeurMax, 1, 1):-

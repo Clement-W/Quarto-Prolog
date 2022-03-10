@@ -24,43 +24,43 @@ demarrer() :-
 % Mode Humain vs Humain
 lancerMode(1) :-
     jouerHvsH(
-              [ vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide(),
-                vide()
+              [ vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide,
+                vide
               ]).
 
 % Mode Humain vs IA
 lancerMode(2) :-
     jouerHvsIAFacile(
-                     [ vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide(),
-                       vide()
+                     [ vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide,
+                       vide
                      ],
                      0).
 
@@ -104,7 +104,7 @@ informerPieceChoisie(P) :-
     afficherCase(P),
     nl.
 
-% Vérifie que les 4 entrées sont bien des pièces (donc que ça ne comprte aucun vide())
+% Vérifie que les 4 entrées sont bien des pièces (donc que ça ne comprte aucun vide)
 quatuorDePieces(P1, P2, P3, P4) :-
     piece(P1),
     piece(P2),

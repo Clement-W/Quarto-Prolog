@@ -33,5 +33,5 @@ placerPiece(P, Plateau, NouveauPlateau) :-
     Y>0,
     Y<5,
     Ind is (X-1)*4+Y,
-    nth1(Ind, Plateau, vide()),
+    nth1(Ind, Plateau, vide),
     changerElemListe(Ind, P, Plateau, NouveauPlateau).
