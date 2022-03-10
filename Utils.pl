@@ -6,6 +6,8 @@ listePiecesRestantes(Plateau, ListePiecesRestantes) :-
     listeToutesLesPieces(ListeToutesLesPieces),
     subtract(ListeToutesLesPieces, Plateau, ListePiecesRestantes).
 
+% Retourne la liste des cases restantes sur le plateau dans ListeCasesRestanteComplete
+% La liste retournée est sous la forme [1,2,3, ... , 16] 
 listeCasesRestantes(Plateau, ListeCasesRestantes, 16, ListeCasesRestantesComplete) :-
     nth1(16, Plateau, vide),
     append(ListeCasesRestantes, [16], ListeCasesRestantesComplete).
