@@ -2,6 +2,11 @@
 %minMax(NoeudPlateau, ScoreNoeud, _, _, _):- ScoreNoeud is score(NoeudPlateau), ScoreNoeud > 999. %Peu-être pas pertinent
 %minMax(NoeudPlateau, ScoreNoeud, Profondeur, PieceAJouer, IndPiece):- Profondeur > 0, NouvelleProfondeur is Profondeur -1, creationNouveauNoeud(PieceAJouer, IndPiece, NoeudPlateau, NouveauPlateau), minMax(NouveauPlateau, ScoreNoeud, NouvelleProfondeur, PieceAJouer, IndPiece).
 
+minMax(Plateau, PieceASelectionner, _):- listePiecesRestantes(Plateau, ListePiecesRestantes),length(ListePiecesRestantes, NbPiecesRestantes), premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, 1, NbPiecesRestantes).
+minMax(Plateau, PieceAPlacer, IndPieceAJouer):- listePiecesRestantes(Plateau, ListePiecesRestantes), substract(ListePiecesRestantes, [PieceAPlacer], ListesPiecesRestantesSansLaPieceAPlacer) , length(ListesPiecesRestantesSansLaPieceAPlacer, NbPiecesRestantes), premierEtage(Plateau, ListesPiecesRestantesSansLaPieceAPlacer, PieceAPlacer, IndPieceAJouer, 1).
+
+%premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, IndPieceRestante, NbPiecesRestantes):- nth1(IndPieceRestante, ListePiecesRestantes, PieceATester), creationNoeudDuNiveau().
+
 % Change l'élément placé à l'indice Ind dans la liste [T|Q] en Elem
 changerElemListe(1,Elem,[_|Q],[Elem|Q]).
 changerElemListe(Ind,Elem,[T|Q],L2):- append([T],L1,L2),Ind2 is Ind-1,changerElemListe(Ind2,Elem,Q,L1).
@@ -155,6 +160,7 @@ listeToutesLesPieces([[grand, carre, creux, blanc],[grand, carre, creux, noir],[
 
 listePiecesRestantes(Plateau,ListePiecesRestantes):- listeToutesLesPieces(ListeToutesLesPieces),subtract(ListeToutesLesPieces,Plateau,ListePiecesRestantes).
 
+% Remarque : listeCasesRestantes doit être appelée avec ListeCasesRestantes=[] et Ind=1
 listeCasesRestantes(Plateau,ListeCasesRestantes,16,ListeCasesRestantesComplete):- nth1(16,Plateau,vide()), append(ListeCasesRestantes,[16],ListeCasesRestantesComplete).
 listeCasesRestantes(_,ListeCasesRestantes,16,ListeCasesRestantes).
 listeCasesRestantes(Plateau,ListeCasesRestantes,Ind,ListeCasesRestantesComplete):- nth1(Ind,Plateau,vide()), append(ListeCasesRestantes,[Ind],NouvelleListeCasesRestantes), Ind2 is Ind+1, listeCasesRestantes(Plateau,NouvelleListeCasesRestantes,Ind2,ListeCasesRestantesComplete).
