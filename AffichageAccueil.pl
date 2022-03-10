@@ -18,7 +18,7 @@ afficherTitre() :-
 
 % Affiche des informations sur le jeu
 afficherTexteAccueil() :-
-    write("Objectif du jeu Quatro : "),
+    write("Objectif du jeu Quarto : "),
     nl,
     write("Aligner 4 pieces ayant au moins un point commun entre elles. Mais attention, ce n'est pas vous qui choisissez votre piece, c'est l'adversaire ! A chaque tour, choisissez une piece pour votre adversaire, puis placez la piece qu'il a choisi pour vous."),
     nl,
