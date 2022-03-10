@@ -1,6 +1,6 @@
 % Tout ce qui est en rapport avce l'affichage visuel du plateau.
 
-% Affiche le plateau de jeu
+% Affiche le plateau de jeu (on utilise un indice ind pour ne pas écrire 4 fois cette règle)
 afficherPlateau(Plateau, 3) :-
     write(" | "),
     nth1(13, Plateau, P1),
@@ -15,6 +15,7 @@ afficherPlateau(Plateau, 3) :-
     nth1(16, Plateau, P4),
     afficherCase(P4),
     write(" | ").
+
 afficherPlateau(Plateau, Ind) :-
     write(" | "),
     Case1 is Ind*4+1,

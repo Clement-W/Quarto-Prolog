@@ -1,3 +1,4 @@
+% Affiche quatro dans la console
 afficherTitre() :-
     write(" ________   ___  ___   ________   ________   _________   ________     "),
     nl,
@@ -15,6 +16,7 @@ afficherTitre() :-
     nl,
     write("          \\|__| ").
 
+% Affiche des informations sur le jeu
 afficherTexteAccueil() :-
     write("Objectif du jeu Quatro : "),
     nl,

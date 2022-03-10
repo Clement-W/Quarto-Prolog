@@ -1,5 +1,7 @@
+% Liste des 16 pièces possibles
 listeToutesLesPieces([[grand, carre, creux, blanc], [grand, carre, creux, noir], [grand, carre, plein, blanc], [grand, carre, plein, noir], [grand, rond, creux, blanc], [grand, rond, creux, noir], [grand, rond, plein, blanc], [grand, rond, plein, noir], [petit, carre, creux, blanc], [petit, carre, creux, noir], [petit, carre, plein, blanc], [petit, carre, plein, noir], [petit, rond, creux, blanc], [petit, rond, creux, noir], [petit, rond, plein, blanc], [petit, rond, plein, noir]]).
 
+% Retourne les pieces restantes dans ListePiecesRestantes
 listePiecesRestantes(Plateau, ListePiecesRestantes) :-
     listeToutesLesPieces(ListeToutesLesPieces),
     subtract(ListeToutesLesPieces, Plateau, ListePiecesRestantes).
