@@ -31,7 +31,7 @@ placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
     changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
 
 
-pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee) :-
+pieceASelectionner([ScorePieceTestee,PieceTestee], Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
     placeASelectionner(PieceTestee,
                        Plateau,
@@ -40,7 +40,7 @@ pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRe
                        NbPiecesRestantes,
                        [ScorePieceTestee, _]).
 
-pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee) :-
+pieceASelectionner(ScoreEtPiece, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
     placeASelectionner(PieceTestee,
                        Plateau,
@@ -49,32 +49,13 @@ pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRe
                        NbPiecesRestantes,
                        [ScorePieceTestee, _]),
     IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
-    pieceASelectionner(_,
+    pieceASelectionner(ScoreEtPieceSuivante,
                        Plateau,
                        ListePiecesRestantes,
                        IndListesPiecesRestantesSuivant,
                        NbPiecesRestantes,
-                       ListeCasesRestantes,
-                       ScorePieceRetenue),
-    ScorePieceTestee<ScorePieceRetenue.
-
-pieceASelectionner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue) :-
-    nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
-    placeASelectionner(PieceTestee,
-                       Plateau,
-                       ListeCasesRestantes,
-                       1,
-                       NbPiecesRestantes,
-                       [ScorePieceTestee, _]),
-    IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
-    pieceASelectionner(PieceRetenue,
-                       Plateau,
-                       ListePiecesRestantes,
-                       IndListesPiecesRestantesSuivant,
-                       NbPiecesRestantes,
-                       ListeCasesRestantes,
-                       ScorePieceRetenue),
-    ScorePieceTestee>ScorePieceRetenue.
+                       ListeCasesRestantes),
+    bonScoreEtObjet(ScoreEtPieceSuivante, [ScorePieceTestee, PieceTestee], ScoreEtPiece).
 
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
@@ -95,11 +76,11 @@ placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCa
                        IndListeCasesRestantesSuivant,
                        NbCasesRestantes,
                        ScoreEtIndiceSuivant),
-    bonScoreEtIndice(ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
+    bonScoreEtObjet(ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
 
-bonScoreEtIndice([Score1, Indice1], [Score2, _], [Score1, Indice1]) :-
+bonScoreEtObjet([Score1, Objet1], [Score2, _], [Score1, Objet1]) :-
     max_list([Score1, Score2], Score1). 
-bonScoreEtIndice([Score1, _], [Score2, Indice2], [Score2, Indice2]) :-
+bonScoreEtObjet([Score1, _], [Score2, Objet2], [Score2, Objet2]) :-
     max_list([Score1, Score2], Score2). 
 
 
