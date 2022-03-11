@@ -81,41 +81,29 @@ pieceASelectionner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesR
     ScorePieceTestee>ScorePieceRetenue.
 
 
-placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, Score, IndPiece) :-
+placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
     write("on passe dans le cas d'arret")
     nth1(NbCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, Score).
 
-placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, Score, IndPiece) :-
+placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreEtIndice) :-
     write("on passe dans le cas ou la nouvelle place est meilleure")
     nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
-    score(NouveauPlateau, Score),
+    score(NouveauPlateau, ScoreActuel),
     IndListeCasesRestantesSuivant is IndListeCasesRestantes+1,
     placeASelectionner(P,
                        Plateau,
                        ListeCasesRestantes,
                        IndListeCasesRestantesSuivant,
                        NbCasesRestantes,
-                       ScoreSuivant,
-                       _),
-    ScoreSuivant<Score.
+                       ScoreEtIndiceSuivant),
+    bonScoreEtIndice(ScoreEtIndiceSuivant, [ScoreActuel,IndPiece], ScoreEtIndice).
 
-placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreSuivant, IndPieceSuivant) :-
-    write("on place dans le ca")
-    nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
-    changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
-    score(NouveauPlateau, Score),
-    IndListeCasesRestantesSuivant is IndListeCasesRestantes+1,
-    placeASelectionner(P,
-                       Plateau,
-                       ListeCasesRestantes,
-                       IndListeCasesRestantesSuivant,
-                       NbCasesRestantes,
-                       ScoreSuivant,
-                       IndPieceSuivant),
-    ScoreSuivant>Score.
+bonScoreEtIndice([Score1, Indice1], [Score2, Indice2], [Score1, Indice1]):- max_list([Score1, Score2], Score1). 
+bonScoreEtIndice([Score1, Indice1], [Score2, Indice2], [Score2, Indice2]):- max_list([Score1, Score2], Score2). 
+
 
 % Les deux prédicats suivants sont appelés dans JouervsIADifficile dans Jeu.pl, nous avons décidé de fixer arbitrairement la profondeur de l'arbre d'exploration de l'algorithme à 4
 %selectionnerPieceIADifficile(P, Plateau) :-
