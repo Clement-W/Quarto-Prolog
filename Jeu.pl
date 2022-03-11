@@ -90,7 +90,7 @@ lancerMode(3) :-
                           vide,
                           vide
                         ],
-                        0).
+                        1).
 
 
 lancerMode(4) :-
