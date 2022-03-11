@@ -25,8 +25,7 @@ placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
                        ListeCasesRestantes,
                        1,
                        NbCasesRestantes,
-                       _,
-                       PlaceASelectionner),
+                       [_, PlaceASelectionner]),
     write("place à sélectoinner est terminé"),
     nl,
     changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
@@ -39,8 +38,7 @@ pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRe
                        ListeCasesRestantes,
                        1,
                        NbPiecesRestantes,
-                       ScorePieceTestee,
-                       _).
+                       [ScorePieceTestee, _]).
 
 pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
@@ -49,8 +47,7 @@ pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRe
                        ListeCasesRestantes,
                        1,
                        NbPiecesRestantes,
-                       ScorePieceTestee,
-                       _),
+                       [ScorePieceTestee, _]),
     IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
     pieceASelectionner(_,
                        Plateau,
@@ -68,8 +65,7 @@ pieceASelectionner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesR
                        ListeCasesRestantes,
                        1,
                        NbPiecesRestantes,
-                       ScorePieceTestee,
-                       _),
+                       [ScorePieceTestee, _]),
     IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
     pieceASelectionner(PieceRetenue,
                        Plateau,
@@ -82,13 +78,13 @@ pieceASelectionner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesR
 
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
-    write("on passe dans le cas d'arret")
+    write("on passe dans le cas d'arret"),
     nth1(NbCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, Score).
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreEtIndice) :-
-    write("on passe dans le cas ou la nouvelle place est meilleure")
+    write("on passe dans le cas ou la nouvelle place est meilleure"),
     nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, ScoreActuel),
@@ -99,10 +95,12 @@ placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCa
                        IndListeCasesRestantesSuivant,
                        NbCasesRestantes,
                        ScoreEtIndiceSuivant),
-    bonScoreEtIndice(ScoreEtIndiceSuivant, [ScoreActuel,IndPiece], ScoreEtIndice).
+    bonScoreEtIndice(ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
 
-bonScoreEtIndice([Score1, Indice1], [Score2, Indice2], [Score1, Indice1]):- max_list([Score1, Score2], Score1). 
-bonScoreEtIndice([Score1, Indice1], [Score2, Indice2], [Score2, Indice2]):- max_list([Score1, Score2], Score2). 
+bonScoreEtIndice([Score1, Indice1], [Score2, _], [Score1, Indice1]) :-
+    max_list([Score1, Score2], Score1). 
+bonScoreEtIndice([Score1, _], [Score2, Indice2], [Score2, Indice2]) :-
+    max_list([Score1, Score2], Score2). 
 
 
 % Les deux prédicats suivants sont appelés dans JouervsIADifficile dans Jeu.pl, nous avons décidé de fixer arbitrairement la profondeur de l'arbre d'exploration de l'algorithme à 4
