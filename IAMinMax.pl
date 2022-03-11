@@ -2,10 +2,13 @@
 :- ['Pieces.pl'].
 
 % IA de niveau moyen
-/*selectionnerPieceIADifficile(P, Plateau) :-
+selectionnerPieceIADifficile(P, Plateau) :-
     listePiecesRestantes(Plateau, ListePiecesRestantes),
     length(ListePiecesRestantes, NbPiecesRestantes),
-    pieceASelectionner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes).*/
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    pieceASelectionner(P, Plateau, ListePiecesRestantes, 1, NbPiecesRestantes, ListeCasesRestantes, _).
+
+
 placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
     length(ListeCasesRestantes, NbCasesRestantes),
@@ -18,7 +21,25 @@ placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
                        PlaceASelectionner),
     changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
 
-%pieceASelectioner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes):-.
+pieceASelectioner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee):-
+    nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
+    placeASelectionner(PieceTestee,Plateau, ListeCasesRestantes, 1, NbPiecesRestantes, ScorePieceTestee, _).
+
+pieceASelectioner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee):-
+    nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
+    placeASelectionner(PieceTestee,Plateau, ListeCasesRestantes, 1, NbPiecesRestantes, ScorePieceTestee, _),
+    IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
+    pieceASelectioner(_, Plateau, ListePiecesRestantes, IndListesPiecesRestantesSuivant, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue),
+    ScorePieceTestee < ScorePieceRetenue.
+
+pieceASelectioner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue):-
+    nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
+    placeASelectionner(PieceTestee,Plateau, ListeCasesRestantes, 1, NbPiecesRestantes, ScorePieceTestee, _),
+    IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
+    pieceASelectioner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesRestantesSuivant, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue),
+    ScorePieceTestee > ScorePieceRetenue.
+
+
 placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, Score, IndPiece) :-
     nth1(NbCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
