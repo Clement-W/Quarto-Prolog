@@ -21,7 +21,7 @@ demarrer() :-
     nl,
     write("[3] : Humain contre IA Moyen"),
     nl,
-    write("[4] : IA Facile contre IA Facile"),
+    write("[4] : IA Facile contre IA Moyen"),
     nl,
     read(ChoixMode),
     lancerMode(ChoixMode).
@@ -90,28 +90,29 @@ lancerMode(3) :-
                       vide,
                       vide
                     ],
-                    1).
+                    0).
 
 
 lancerMode(4) :-
-    jouerIAFacilevsIAFacile(
-                            [ vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide,
-                              vide
-                            ]).
+    jouerIAFacilevsIAMoyen(
+                           [ vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide,
+                             vide
+                           ],
+                           0).
 
 
 % Fait un tour de jeu : sélection de pièce par J1, placement de la pièce par J2 et vérification s'il y a victoire ou non
@@ -169,16 +170,33 @@ jouerHvsIAMoyen(Plateau, 1) :-
     verifVictoire(NouveauPlateau, 3, 1).
 
 
-% IA Facile contre IA Facile : 
-jouerIAFacilevsIAFacile(Plateau) :-
+% IA Facile contre IA Moyen : 
+jouerIAFacilevsIAMoyen(Plateau, 0) :-
     nl,
     afficherPlateau(Plateau, 0),
+    nl,
+    write("L'IA Facile va choisir une pièce : "),
     nl,
     selectionnerPieceIAFacile(P, Plateau), % sélection de la pièce par l'IA facile
     informerPieceChoisie(P),
     nl,
-    placerPieceIAFacile(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par l'IA facile
-    verifVictoire(NouveauPlateau, 4, _).
+    write("l'IA Moyen va placer une pièce : "),
+    nl,
+    placerPieceIAMoyen(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par l'IA Moyen
+    verifVictoire(NouveauPlateau, 4, 0).
+
+jouerIAFacilevsIAMoyen(Plateau, 1) :-
+    nl,
+    afficherPlateau(Plateau, 0),
+    nl,
+    write("L'IA Moyen va choisir une pièce : "),
+    nl,
+    selectionnerPieceIAMoyen(P, Plateau), % sélection de la pièce par l'IA moyen
+    informerPieceChoisie(P),
+    nl,
+    write("l'IA Facile va placer une pièce : "),
+    placerPieceIAMoyen(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par l'IA Moyen
+    verifVictoire(NouveauPlateau, 4, 1).
 
 % affiche la pièce qui a été choisie
 informerPieceChoisie(P) :-
@@ -386,8 +404,15 @@ verifVictoire(Plateau, 3, 1) :-
     jouerHvsIAMoyen(Plateau, 0). 
 
 
-% Cas où l'IA Facile joue contre une autre IA Facile :
-verifVictoire(Plateau, 4, _) :-
+% Cas où l'IA Facile joue contre une autre IA Moyen :
+% Cas où l'IA moyen vient de placer, pas de victoire, c'est au tour de l'IA faile de placer
+verifVictoire(Plateau, 4, 0) :-
     write("Pas de victoire"),
     nl,
-    jouerIAFacilevsIAFacile(Plateau). 
+    jouerIAFacilevsIAMoyen(Plateau, 1). 
+
+% Cas où l'IA facile vient de placer, pas de victoire, c'est au tour de l'IA moyen de placer 
+verifVictoire(Plateau, 4, 1) :-
+    write("Pas de victoire"),
+    nl,
+    jouerIAFacilevsIAMoyen(Plateau, 0). 
