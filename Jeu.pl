@@ -4,7 +4,7 @@
 :- ['Utils.pl'].
 :- ['IAFacile.pl'].
 :- ['JoueurHumain.pl'].
-:- ['IAMinMax.pl'].
+:- ['IAMoyen.pl'].
 
 % démarre le jeu
 demarrer() :-
@@ -19,7 +19,7 @@ demarrer() :-
     nl,
     write("[2] : Humain contre IA Facile"),
     nl,
-    write("[3] : Humain contre IA Difficile"),
+    write("[3] : Humain contre IA Moyen"),
     nl,
     write("[4] : IA Facile contre IA Facile"),
     nl,
@@ -72,25 +72,25 @@ lancerMode(2) :-
 
 
 lancerMode(3) :-
-    jouerHvsIADifficile(
-                        [ vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide,
-                          vide
-                        ],
-                        1).
+    jouerHvsIAMoyen(
+                    [ vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide,
+                      vide
+                    ],
+                    1).
 
 
 lancerMode(4) :-
@@ -147,25 +147,25 @@ jouerHvsIAFacile(Plateau, 1) :-
     placerPieceIAFacile(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par l'IA Facile
     verifVictoire(NouveauPlateau, 2, 1).
 
-% IA difficile :
+% IA Moyen :
 % Cas où c'est l'IA qui sélectionne la pièce, et le joueur qui la place
-jouerHvsIADifficile(Plateau, 0) :-
+jouerHvsIAMoyen(Plateau, 0) :-
     nl,
     afficherPlateau(Plateau, 0),
     nl,
-    selectionnerPieceIADifficile(P, Plateau), % sélection de la pièce par l'IA Difficile
+    selectionnerPieceIAMoyen(P, Plateau), % sélection de la pièce par l'IA Moyen
     informerPieceChoisie(P),
     placerPiece(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par le joueur humain
     verifVictoire(NouveauPlateau, 3, 0).
 
 % Cas où c'est le joueur qui sélectionne la pièce, et le joueur qui la place
-jouerHvsIADifficile(Plateau, 1) :-
+jouerHvsIAMoyen(Plateau, 1) :-
     nl,
     afficherPlateau(Plateau, 0),
     nl,
     selectPiece(P, Plateau), % sélection de la pièce par le joueur humain
     informerPieceChoisie(P),
-    placerPieceIADifficile(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par l'IA Difficile
+    placerPieceIAMoyen(P, Plateau, NouveauPlateau), % placement de la pièce dans le plateau par l'IA Moyen
     verifVictoire(NouveauPlateau, 3, 1).
 
 
@@ -371,19 +371,19 @@ verifVictoire(Plateau, 2, 1) :-
     jouerHvsIAFacile(Plateau, 0). 
 
 
-% Cas où le mode de jeu est Humain contre IA Difficile :
+% Cas où le mode de jeu est Humain contre IA Moyen :
 
 % Cas où l'humain vient de placer, pas de victoire, c'est au tour de l'IA de placer
 verifVictoire(Plateau, 3, 0) :-
     write("Pas de victoire"),
     nl,
-    jouerHvsIADifficile(Plateau, 1). 
+    jouerHvsIAMoyen(Plateau, 1). 
 
 % Cas où l'IA vient de placer, pas de victoire, c'est au tour de l'humain de placer 
 verifVictoire(Plateau, 3, 1) :-
     write("Pas de victoire"),
     nl,
-    jouerHvsIADifficile(Plateau, 0). 
+    jouerHvsIAMoyen(Plateau, 0). 
 
 
 % Cas où l'IA Facile joue contre une autre IA Facile :

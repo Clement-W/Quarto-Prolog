@@ -18,18 +18,18 @@ pieceSelectionnable(P, Plateau) :-
 % Placement d'une pièce par J2 sur le plateau (donne lieu à un nouveau plateau)
 placerPiece(P, Plateau, NouveauPlateau) :-
     nl,
-    write("X l'autre joueur de jouer."),
+    write("A l'autre joueur de jouer"),
     nl,
     nl,
     repeat,
     write("Choisissez la ligne"),
     nl,
-    read(X), % Y doit être compris entre 1 et 4
+    read(X),
     X>0,
     X<5,
     write("Choisissez la colonne"),
     nl,
-    read(Y), % Y doit être compris entre 1 et 4
+    read(Y),
     Y>0,
     Y<5,
     Ind is (X-1)*4+Y,
