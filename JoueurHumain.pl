@@ -24,14 +24,14 @@ placerPiece(P, Plateau, NouveauPlateau) :-
     repeat,
     write("Choisissez la ligne"),
     nl,
-    read(X), % x doit être compris entre 1 et 4
+    read(X), % Y doit être compris entre 1 et 4
     X>0,
     X<5,
     write("Choisissez la colonne"),
     nl,
-    read(Y), % y doit être compris entre 1 et 4
+    read(Y), % Y doit être compris entre 1 et 4
     Y>0,
     Y<5,
-    Ind is (X-1)*4+Y, % calcul de l'indice correpsondant dans la liste de 16 éléments
-    nth1(Ind, Plateau, vide), % on vérifie bien que c'est un vide à l'emplacement corespondant
+    Ind is (X-1)*4+Y,
+    nth1(Ind, Plateau, vide),
     changerElemListe(Ind, P, Plateau, NouveauPlateau). % on remplace ce vide par la pièce

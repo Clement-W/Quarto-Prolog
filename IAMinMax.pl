@@ -6,7 +6,7 @@ selectionnerPieceIADifficile(P, Plateau) :-
     listePiecesRestantes(Plateau, ListePiecesRestantes),
     length(ListePiecesRestantes, NbPiecesRestantes),
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
-    pieceASelectionner([_,P],
+    pieceASelectionner([_, P],
                        Plateau,
                        ListePiecesRestantes,
                        1,
@@ -30,7 +30,7 @@ placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
     changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
 
 
-pieceASelectionner([ScorePieceTestee,PieceTestee], Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
+pieceASelectionner([ScorePieceTestee, PieceTestee], Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
     placeASelectionner(PieceTestee,
                        Plateau,
