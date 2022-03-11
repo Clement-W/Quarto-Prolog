@@ -2,12 +2,16 @@
 :- ['Pieces.pl'].
 
 % IA de niveau moyen
-selectionnerPieceIADifficile(P, Plateau) :-
+/*selectionnerPieceIADifficile(P, Plateau) :-
     listePiecesRestantes(Plateau, ListePiecesRestantes),
     length(ListePiecesRestantes, NbPiecesRestantes),
-    pieceASelectionner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes).
+    pieceASelectionner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes).*/
 
-%placerPieceIAMoyenne(P, Plateau, NouveauPlateau) :- listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes), length(ListeCasesRestantes, NbCasesRestantes),placeASelectionner(P, Plateau, ListeCasesRestantes, 1, NbCasesRestantes, _, PlaceASelectionner).
+placerPieceIADifficile(P, Plateau, NouveauPlateau) :- 
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes), 
+    length(ListeCasesRestantes, NbCasesRestantes),
+    placeASelectionner(P, Plateau, ListeCasesRestantes, 1, NbCasesRestantes, _, PlaceASelectionner),
+    changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
 
 %pieceASelectioner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes):-.
 
