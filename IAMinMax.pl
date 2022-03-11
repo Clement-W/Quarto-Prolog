@@ -1,12 +1,43 @@
 :- ['Utils.pl'].
 :- ['Pieces.pl'].
 
-% Les deux prédicats suivants sont appelés dans JouervsIADifficile dans Jeu.pl, nous avons décidé de fixer arbitrairement la profondeur de l'arbre d'exploration de l'algorithme à 4
+% IA de niveau moyen
 selectionnerPieceIADifficile(P, Plateau) :-
-    minMax(Plateau, P, 4).
-placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
-    minMax(Plateau, P, IndPiece, 4),
-    changerElemListe(IndPiece, P, Plateau, NouveauPlateau).
+    listePiecesRestantes(Plateau, ListePiecesRestantes),
+    length(ListePiecesRestantes, NbPiecesRestantes),
+    pieceASelectionner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes).
+
+%placerPieceIAMoyenne(P, Plateau, NouveauPlateau) :- listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes), length(ListeCasesRestantes, NbCasesRestantes),placeASelectionner(P, Plateau, ListeCasesRestantes, 1, NbCasesRestantes, _, PlaceASelectionner).
+
+%pieceASelectioner(P, Plateau, ListePiecesRestantes, NbPiecesRestantes):-.
+
+placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, Score, IndPiece):-
+    nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
+    changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
+    score(NouveauPlateau, Score).
+
+placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, Score, IndPiece):-
+    nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
+    changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
+    score(NouveauPlateau, Score),
+    IndListeCasesRestantesSuivant is IndListeCasesRestantes+1,
+    placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantesSuivant, NbCasesRestantes, ScoreSuivant, IndPieceSuivant),
+    ScoreSuivant < Score.
+
+placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreSuivant, IndPieceSuivant):-
+    nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
+    changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
+    score(NouveauPlateau, Score),
+    IndListeCasesRestantesSuivant is IndListeCasesRestantes+1,
+    placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantesSuivant, NbCasesRestantes, ScoreSuivant, IndPieceSuivant),
+    ScoreSuivant > Score.
+
+% Les deux prédicats suivants sont appelés dans JouervsIADifficile dans Jeu.pl, nous avons décidé de fixer arbitrairement la profondeur de l'arbre d'exploration de l'algorithme à 4
+%selectionnerPieceIADifficile(P, Plateau) :-
+%    minMax(Plateau, P, 4).
+%placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
+%    minMax(Plateau, P, IndPiece, 4),
+%    changerElemListe(IndPiece, P, Plateau, NouveauPlateau).
 
 % minMax enclenche l'exécution de l'algorithme de l'IA pour :
     % sélectionner la pire pièce possible pour l'adversaire
