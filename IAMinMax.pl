@@ -6,11 +6,19 @@ selectionnerPieceIADifficile(P, Plateau) :-
     listePiecesRestantes(Plateau, ListePiecesRestantes),
     length(ListePiecesRestantes, NbPiecesRestantes),
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
-    pieceASelectionner(P, Plateau, ListePiecesRestantes, 1, NbPiecesRestantes, ListeCasesRestantes, _).
+    pieceASelectionner(P,
+                       Plateau,
+                       ListePiecesRestantes,
+                       1,
+                       NbPiecesRestantes,
+                       ListeCasesRestantes,
+                       _).
 
 
 placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    write("on a listé les cases restantes"),
+    nl,
     length(ListeCasesRestantes, NbCasesRestantes),
     placeASelectionner(P,
                        Plateau,
@@ -19,33 +27,68 @@ placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
                        NbCasesRestantes,
                        _,
                        PlaceASelectionner),
+    write("place à sélectoinner est terminé"),
+    nl,
     changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
 
-pieceASelectioner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee):-
-    nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
-    placeASelectionner(PieceTestee,Plateau, ListeCasesRestantes, 1, NbPiecesRestantes, ScorePieceTestee, _).
 
-pieceASelectioner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee):-
+pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
-    placeASelectionner(PieceTestee,Plateau, ListeCasesRestantes, 1, NbPiecesRestantes, ScorePieceTestee, _),
-    IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
-    pieceASelectioner(_, Plateau, ListePiecesRestantes, IndListesPiecesRestantesSuivant, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue),
-    ScorePieceTestee < ScorePieceRetenue.
+    placeASelectionner(PieceTestee,
+                       Plateau,
+                       ListeCasesRestantes,
+                       1,
+                       NbPiecesRestantes,
+                       ScorePieceTestee,
+                       _).
 
-pieceASelectioner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue):-
+pieceASelectionner(PieceTestee, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceTestee) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
-    placeASelectionner(PieceTestee,Plateau, ListeCasesRestantes, 1, NbPiecesRestantes, ScorePieceTestee, _),
+    placeASelectionner(PieceTestee,
+                       Plateau,
+                       ListeCasesRestantes,
+                       1,
+                       NbPiecesRestantes,
+                       ScorePieceTestee,
+                       _),
     IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
-    pieceASelectioner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesRestantesSuivant, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue),
-    ScorePieceTestee > ScorePieceRetenue.
+    pieceASelectionner(_,
+                       Plateau,
+                       ListePiecesRestantes,
+                       IndListesPiecesRestantesSuivant,
+                       NbPiecesRestantes,
+                       ListeCasesRestantes,
+                       ScorePieceRetenue),
+    ScorePieceTestee<ScorePieceRetenue.
+
+pieceASelectionner(PieceRetenue, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes, ScorePieceRetenue) :-
+    nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
+    placeASelectionner(PieceTestee,
+                       Plateau,
+                       ListeCasesRestantes,
+                       1,
+                       NbPiecesRestantes,
+                       ScorePieceTestee,
+                       _),
+    IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
+    pieceASelectionner(PieceRetenue,
+                       Plateau,
+                       ListePiecesRestantes,
+                       IndListesPiecesRestantesSuivant,
+                       NbPiecesRestantes,
+                       ListeCasesRestantes,
+                       ScorePieceRetenue),
+    ScorePieceTestee>ScorePieceRetenue.
 
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, Score, IndPiece) :-
+    write("on passe dans le cas d'arret")
     nth1(NbCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, Score).
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, Score, IndPiece) :-
+    write("on passe dans le cas ou la nouvelle place est meilleure")
     nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, Score),
@@ -60,6 +103,7 @@ placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCa
     ScoreSuivant<Score.
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreSuivant, IndPieceSuivant) :-
+    write("on place dans le ca")
     nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, Score),
