@@ -4,6 +4,7 @@
 :- ['Utils.pl'].
 :- ['IAFacile.pl'].
 :- ['JoueurHumain.pl'].
+:- ['IAMinMax.pl'].
 
 % démarre le jeu
 demarrer() :-
