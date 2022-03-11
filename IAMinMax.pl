@@ -1,13 +1,61 @@
-%minMax(NoeudPlateau, ScoreNoeud, 0, _, _):- ScoreNoeud is score(NoeudPlateau).
-%minMax(NoeudPlateau, ScoreNoeud, _, _, _):- ScoreNoeud is score(NoeudPlateau), ScoreNoeud > 999. %Peu-être pas pertinent
-%minMax(NoeudPlateau, ScoreNoeud, Profondeur, PieceAJouer, IndPiece):- Profondeur > 0, NouvelleProfondeur is Profondeur -1, creationNouveauNoeud(PieceAJouer, IndPiece, NoeudPlateau, NouveauPlateau), minMax(NouveauPlateau, ScoreNoeud, NouvelleProfondeur, PieceAJouer, IndPiece).
 :- ['Utils.pl'].
 :- ['Pieces.pl'].
 
-minMax(Plateau, PieceASelectionner, _):- listePiecesRestantes(Plateau, ListePiecesRestantes),length(ListePiecesRestantes, NbPiecesRestantes), premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, 1, NbPiecesRestantes).
-minMax(Plateau, PieceAPlacer, IndPieceAJouer):- listePiecesRestantes(Plateau, ListePiecesRestantes), substract(ListePiecesRestantes, [PieceAPlacer], ListesPiecesRestantesSansLaPieceAPlacer) , length(ListesPiecesRestantesSansLaPieceAPlacer, NbPiecesRestantes), premierEtage(Plateau, ListesPiecesRestantesSansLaPieceAPlacer, PieceAPlacer, IndPieceAJouer, 1).
+selectionnerPieceIADifficile(P, Plateau):- minMax(Plateau, P, 4).
+placerPieceIADifficile(P, Plateau, NouveauPlateau):- minMax(Plateau, P, IndPiece, 4), changerElemListe(IndPiece, P, Plateau, NouveauPlateau).
 
-%premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, IndPieceRestante, NbPiecesRestantes):- nth1(IndPieceRestante, ListePiecesRestantes, PieceATester), creationNoeudDuNiveau().
+minMax(Plateau, PieceASelectionner, ProfondeurMax):- listePiecesRestantes(Plateau, ListePiecesRestantes),length(ListePiecesRestantes, NbPiecesRestantes), premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 1, NbPiecesRestantes, ProfondeurMax, _).
+minMax(Plateau, PieceAPlacer, IndPieceAJouer, ProfondeurMax):- listePiecesRestantes(Plateau, ListePiecesRestantes), subtract(ListePiecesRestantes, [PieceAPlacer], ListesPiecesRestantesSansLaPieceAPlacer), length(ListesPiecesRestantesSansLaPieceAPlacer, NbPiecesRestantes), premierEtage(Plateau, PieceAPlacer, IndPieceAJouer, _, NbPiecesRestantes, ProfondeurMax).
+
+% Cas où l'IA doit sélectionner une pièce pour son adversaire
+premierEtage(Plateau, ListePiecesRestantes, PieceATester, NbPiecesRestantes, NbPiecesRestantes, ProfondeurMax, ScorePiece):-
+    nth1(NbPiecesRestantes, ListePiecesRestantes, PieceATester),
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    nth1(IndPiece, Plateau, PieceATester), 
+    creationNoeudDuNiveau(Plateau, PieceATester, ScorePiece, 0, ListeCasesRestantes, 1, IndPiece, 1, ProfondeurMax, 1, NbPiecesRestantes).
+
+premierEtage(Plateau, ListePiecesRestantes, PieceATester, IndPieceRestante, NbPiecesRestantes, ProfondeurMax, ScorePiece):-
+    nth1(IndPieceRestante, ListePiecesRestantes, PieceATester),
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    nth1(IndPiece, Plateau, PieceATester), 
+    creationNoeudDuNiveau(Plateau, PieceATester, ScorePiece, 0, ListeCasesRestantes, 1, IndPiece, 1, ProfondeurMax, 1, NbPiecesRestantes), %Remarque : le nombre de pièces restantes est égal au nombre de cases encore vides
+    IndPieceRestanteSuivant is IndPieceRestante+1,
+    premierEtage(Plateau, ListePiecesRestantes, _, 0, IndPieceRestanteSuivant, NbPiecesRestantes, ProfondeurMax, ScorePieceSuivante),
+    ScorePieceSuivante > ScorePiece.
+
+premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, IndPieceRestante, NbPiecesRestantes, ProfondeurMax, ScorePieceSuivante):-
+    nth1(IndPieceRestante, ListePiecesRestantes, PieceATester),
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes), 
+    nth1(IndPiece, Plateau, PieceATester),
+    creationNoeudDuNiveau(Plateau, PieceATester, ScorePiece, 0, ListeCasesRestantes, 1, IndPiece, 1, ProfondeurMax, 1, NbPiecesRestantes), %Remarque : le nombre de pièces restantes est égal au nombre de cases encore vides
+    IndPieceRestanteSuivant is IndPieceRestante+1,
+    premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, 0, IndPieceRestanteSuivant, NbPiecesRestantes, ProfondeurMax, ScorePieceSuivante),
+    ScorePieceSuivante < ScorePiece.
+
+%Cas où l'IA doit placer une pièce sélectionner par l'adversaire
+premierEtage(Plateau, PieceAPlacer, IndTeste, ScorePlace, 1, ProfondeurMax):-
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    nth1(1, ListeCasesRestantes, IndTeste),
+    changerElemListe(IndTeste, PieceAPlacer, Plateau, PlateauAvecPiece),
+    creationNoeudDuNiveau(PlateauAvecPiece, _, ScorePlace, 1, _, _, _, 1, ProfondeurMax, 1, 1).
+
+premierEtage(Plateau, PieceAPlacer, IndPieceAPlacer, ScorePlaceSuivante, NbCasesNonTestees, ProfondeurMax):-
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    nth1(NbCasesNonTestees, ListeCasesRestantes, IndTeste),
+    changerElemListe(IndTeste, PieceAPlacer, Plateau, PlateauAvecPiece),
+    creationNoeudDuNiveau(PlateauAvecPiece, _, ScorePlace, 1, _, _, _, 1, ProfondeurMax, NbCasesNonTestees, NbCasesNonTestees),
+    NbCasesNonTesteActualise is NbCasesNonTestees-1,
+    premierEtage(Plateau, PieceAPlacer, IndPieceAPlacer, ScorePlaceSuivante, 1, NbCasesNonTesteActualise, ProfondeurMax),
+    ScorePlaceSuivante > ScorePlace.
+
+premierEtage(Plateau, PieceAPlacer, IndTeste, ScorePlace, NbCasesNonTestees, ProfondeurMax):-
+    listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
+    nth1(NbCasesNonTestees, ListeCasesRestantes, IndTeste),
+    changerElemListe(IndTeste, PieceAPlacer, Plateau, PlateauAvecPiece),
+    creationNoeudDuNiveau(PlateauAvecPiece, _, ScorePlace, 1, _, _, _, 1, ProfondeurMax, NbCasesNonTestees, NbCasesNonTestees),
+    NbCasesNonTesteActualise is NbCasesNonTestees-1,
+    premierEtage(Plateau, PieceAPlacer, _, ScorePlaceSuivante, 1, NbCasesNonTesteActualise, ProfondeurMax),
+    ScorePlaceSuivante < ScorePlace.
 
 score(Plateau, Score) :-
     evaluerLignes(Plateau, ScoreLignes),
@@ -142,7 +190,6 @@ creationNoeudDuNiveau(NoeudPlateau, _, ScoreNoeudPrecedent, _, _, _, _, Profonde
     % on veut maximiser le score du noeud précédent (MinOrMax == 1) et ce noeud a un score plus grand 
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 1, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax) :-
     score(NoeudPlateau, ScoreNoeud),
-    ScoreNoeud>ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -158,11 +205,11 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 1, ListeCasesRestan
                           ProfondeurMax,
                           ProfondeurMax,
                           NumeroSuivant,
-                          NumeroMax).
+                          NumeroMax),
+    ScoreNoeud>ScoreNoeudPrecedentActuellement.
     % on veut maximiser le score du noeud précédent (MinOrMax == 1) et ce noeud a un score plus petit 
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement, 1, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax) :-
     score(NoeudPlateau, ScoreNoeud),
-    ScoreNoeud<ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -178,11 +225,11 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement
                           ProfondeurMax,
                           ProfondeurMax,
                           NumeroSuivant,
-                          NumeroMax).
+                          NumeroMax),
+    ScoreNoeud<ScoreNoeudPrecedentActuellement.
     % on veut minimiser le score du noeud précédent (MinOrMax == 0) et ce noeud a un score plus petit 
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 0, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax) :-
     score(NoeudPlateau, ScoreNoeud),
-    ScoreNoeud<ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -198,11 +245,11 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 0, ListeCasesRestan
                           ProfondeurMax,
                           ProfondeurMax,
                           NumeroSuivant,
-                          NumeroMax).
+                          NumeroMax),
+    ScoreNoeud<ScoreNoeudPrecedentActuellement.
     % on veut minimiser le score du noeud précédent (MinOrMax == 0) et ce noeud a un score plus grand 
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement, 0, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, ProfondeurMax, ProfondeurMax, Numero, NumeroMax) :-
     score(NoeudPlateau, ScoreNoeud),
-    ScoreNoeud>ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -218,7 +265,8 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement
                           ProfondeurMax,
                           ProfondeurMax,
                           NumeroSuivant,
-                          NumeroMax).
+                          NumeroMax),
+    ScoreNoeud>ScoreNoeudPrecedentActuellement.
 
 
 % Cas de profondeur non maximale et fin de niveau
@@ -267,7 +315,6 @@ creationNoeudDuNiveau(NoeudPlateau, _, ScoreNoeud, 0, _, _, _, Profondeur, Profo
 % Cas de profondeur non maximale et non fin de niveau
     % on veut maximiser le score du noeud précédent (MinOrMax == 1) et ce noeud a un score plus grand 
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 1, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, Profondeur, ProfondeurMax, Numero, NumeroMax) :-
-    ScoreNoeud>ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -284,6 +331,7 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 1, ListeCasesRestan
                           ProfondeurMax,
                           NumeroSuivant,
                           NumeroMax),
+    ScoreNoeud>ScoreNoeudPrecedentActuellement,
     NouvelleProfondeur is Profondeur+1,
     listePiecesRestantes(NoeudPlateau, ListePiecesRestantes),
     nth1(1, ListePiecesRestantes, NouvellePieceTestee),
@@ -304,7 +352,6 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 1, ListeCasesRestan
                           NumeroMaxNiveauSuivant).
     % on veut maximiser le score du noeud précédent (MinOrMax == 1) et ce noeud a un score plus petit
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement, 1, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, Profondeur, ProfondeurMax, Numero, NumeroMax) :-
-    ScoreNoeud<ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -321,6 +368,7 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement
                           ProfondeurMax,
                           NumeroSuivant,
                           NumeroMax),
+    ScoreNoeud<ScoreNoeudPrecedentActuellement,
     NouvelleProfondeur is Profondeur+1,
     listePiecesRestantes(NoeudPlateau, ListePiecesRestantes),
     nth1(1, ListePiecesRestantes, NouvellePieceTestee),
@@ -341,7 +389,6 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement
                           NumeroMaxNiveauSuivant).
     % on veut minimiser le score du noeud précédent (MinOrMax == 0) et ce noeud a un score plus petit
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 0, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, Profondeur, ProfondeurMax, Numero, NumeroMax) :-
-    ScoreNoeud<ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -358,6 +405,7 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 0, ListeCasesRestan
                           ProfondeurMax,
                           NumeroSuivant,
                           NumeroMax),
+    ScoreNoeud<ScoreNoeudPrecedentActuellement,
     NouvelleProfondeur is Profondeur+1,
     listePiecesRestantes(NoeudPlateau, ListePiecesRestantes),
     nth1(1, ListePiecesRestantes, NouvellePieceTestee),
@@ -378,7 +426,6 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeud, 0, ListeCasesRestan
                           NumeroMaxNiveauSuivant).
     % on veut minimiser le score du noeud précédent (MinOrMax == 0) et ce noeud a un score plus grand
 creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement, 0, ListeCasesRestantes, IndListeCasesRestantes, IndPiece, Profondeur, ProfondeurMax, Numero, NumeroMax) :-
-    ScoreNoeud>ScoreNoeudPrecedentActuellement,
     NumeroSuivant is Numero+1,
     changerElemListe(IndPiece, vide, NoeudPlateau, NoeudPlateauIntermediaire),
     IndSuivantListeCasesRestantes is IndListeCasesRestantes+1,
@@ -395,6 +442,7 @@ creationNoeudDuNiveau(NoeudPlateau, PieceTestee, ScoreNoeudPrecedentActuellement
                           ProfondeurMax,
                           NumeroSuivant,
                           NumeroMax),
+    ScoreNoeud>ScoreNoeudPrecedentActuellement,
     NouvelleProfondeur is Profondeur+1,
     listePiecesRestantes(NoeudPlateau, ListePiecesRestantes),
     nth1(1, ListePiecesRestantes, NouvellePieceTestee),
