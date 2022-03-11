@@ -6,13 +6,12 @@ selectionnerPieceIADifficile(P, Plateau) :-
     listePiecesRestantes(Plateau, ListePiecesRestantes),
     length(ListePiecesRestantes, NbPiecesRestantes),
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
-    pieceASelectionner(P,
+    pieceASelectionner([_,P],
                        Plateau,
                        ListePiecesRestantes,
                        1,
                        NbPiecesRestantes,
-                       ListeCasesRestantes,
-                       _).
+                       ListeCasesRestantes).
 
 
 placerPieceIADifficile(P, Plateau, NouveauPlateau) :-
