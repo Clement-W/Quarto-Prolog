@@ -31,6 +31,9 @@ placerPieceIAMoyen(P, Plateau, NouveauPlateau) :-
     changerElemListe(placeAChoisir, P, Plateau, NouveauPlateau).
 
 
+% pieceASelectioner remonte la pièce dont le placement est associé au plateau avec le pire score,
+% le long d'un appel récursif, nécessaire pour tester toutes les pièces restantes
+    % Cas d'arrêt : on a atteint la dernière pièce restante
 pieceASelectionner([ScorePieceTestee, PieceTestee], Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
     placeAChoisir(PieceTestee,
@@ -58,6 +61,9 @@ pieceASelectionner(ScoreEtPiece, Plateau, ListePiecesRestantes, IndListesPiecesR
     bonScoreEtObjet(0, ScoreEtPieceSuivante, [ScorePieceTestee, PieceTestee], ScoreEtPiece).
 
 
+% placeAChoisir remonte la place de la pièce P associée au plateau avec le meilleur score,
+% le long d'un appel récursif, nécessaire pour tester toutes les cases encore vides
+    % Cas d'arrêt : on a atteint la dernière case vide
 placeAChoisir(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
     nth1(NbCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
@@ -72,6 +78,7 @@ placeAChoisir(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRe
     bonScoreEtObjet(1, ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
 
 
+% bonScoreEtObjet permet de remonter un objet relié à un score grâce à une liste
 % 0 pour sortir la liste avec le pire score
 bonScoreEtObjet(0, [Score1, Objet1], [Score2, _], [Score1, Objet1]) :-
     min_list([Score1, Score2], Score1). 
