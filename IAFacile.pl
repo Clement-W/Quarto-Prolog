@@ -11,5 +11,4 @@ selectionnerPieceIAFacile(P, Plateau) :-
 placerPieceIAFacile(P, Plateau, NouveauPlateau) :-
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
     random_member(IndicePosition, ListeCasesRestantes),
-    changerElemListe(IndicePosition, P, Plateau, NouveauPlateau).
-
+    changerElemListe(IndicePosition, P, Plateau, NouveauPlateau).  % Change l'élément vide dans le plateau par la pièce
