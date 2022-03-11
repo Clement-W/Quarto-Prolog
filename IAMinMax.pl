@@ -55,7 +55,7 @@ pieceASelectionner(ScoreEtPiece, Plateau, ListePiecesRestantes, IndListesPiecesR
                        IndListesPiecesRestantesSuivant,
                        NbPiecesRestantes,
                        ListeCasesRestantes),
-    bonScoreEtObjet(ScoreEtPieceSuivante, [ScorePieceTestee, PieceTestee], ScoreEtPiece).
+    bonScoreEtObjet(0, ScoreEtPieceSuivante, [ScorePieceTestee, PieceTestee], ScoreEtPiece).
 
 
 placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
@@ -76,11 +76,18 @@ placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCa
                        IndListeCasesRestantesSuivant,
                        NbCasesRestantes,
                        ScoreEtIndiceSuivant),
-    bonScoreEtObjet(ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
+    bonScoreEtObjet(1, ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
 
-bonScoreEtObjet([Score1, Objet1], [Score2, _], [Score1, Objet1]) :-
+
+% 0 pour sortir la liste avec le pire score
+bonScoreEtObjet(0, [Score1, Objet1], [Score2, _], [Score1, Objet1]) :-
+    min_list([Score1, Score2], Score1). 
+bonScoreEtObjet(0, [Score1, _], [Score2, Objet2], [Score2, Objet2]) :-
+    min_list([Score1, Score2], Score2). 
+% 1 pour sortir la liste avec le meilleur score
+bonScoreEtObjet(1, [Score1, Objet1], [Score2, _], [Score1, Objet1]) :-
     max_list([Score1, Score2], Score1). 
-bonScoreEtObjet([Score1, _], [Score2, Objet2], [Score2, Objet2]) :-
+bonScoreEtObjet(1, [Score1, _], [Score2, Objet2], [Score2, Objet2]) :-
     max_list([Score1, Score2], Score2). 
 
 
