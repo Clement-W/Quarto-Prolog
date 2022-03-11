@@ -18,33 +18,33 @@ placerPieceIAMoyen(P, Plateau, NouveauPlateau) :-
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
     nl,
     length(ListeCasesRestantes, NbCasesRestantes),
-    placeASelectionner(P,
-                       Plateau,
-                       ListeCasesRestantes,
-                       1,
-                       NbCasesRestantes,
-                       [_, PlaceASelectionner]),
+    placeAChoisir(P,
+                  Plateau,
+                  ListeCasesRestantes,
+                  1,
+                  NbCasesRestantes,
+                  [_, placeAChoisir]),
     nl,
-    changerElemListe(PlaceASelectionner, P, Plateau, NouveauPlateau).
+    changerElemListe(placeAChoisir, P, Plateau, NouveauPlateau).
 
 
 pieceASelectionner([ScorePieceTestee, PieceTestee], Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
-    placeASelectionner(PieceTestee,
-                       Plateau,
-                       ListeCasesRestantes,
-                       1,
-                       NbPiecesRestantes,
-                       [ScorePieceTestee, _]).
+    placeAChoisir(PieceTestee,
+                  Plateau,
+                  ListeCasesRestantes,
+                  1,
+                  NbPiecesRestantes,
+                  [ScorePieceTestee, _]).
 
 pieceASelectionner(ScoreEtPiece, Plateau, ListePiecesRestantes, IndListesPiecesRestantes, NbPiecesRestantes, ListeCasesRestantes) :-
     nth1(IndListesPiecesRestantes, ListePiecesRestantes, PieceTestee),
-    placeASelectionner(PieceTestee,
-                       Plateau,
-                       ListeCasesRestantes,
-                       1,
-                       NbPiecesRestantes,
-                       [ScorePieceTestee, _]),
+    placeAChoisir(PieceTestee,
+                  Plateau,
+                  ListeCasesRestantes,
+                  1,
+                  NbPiecesRestantes,
+                  [ScorePieceTestee, _]),
     IndListesPiecesRestantesSuivant is IndListesPiecesRestantes+1,
     pieceASelectionner(ScoreEtPieceSuivante,
                        Plateau,
@@ -55,22 +55,17 @@ pieceASelectionner(ScoreEtPiece, Plateau, ListePiecesRestantes, IndListesPiecesR
     bonScoreEtObjet(0, ScoreEtPieceSuivante, [ScorePieceTestee, PieceTestee], ScoreEtPiece).
 
 
-placeASelectionner(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
+placeAChoisir(P, Plateau, ListeCasesRestantes, NbCasesRestantes, NbCasesRestantes, [Score, IndPiece]) :-
     nth1(NbCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, Score).
 
-placeASelectionner(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreEtIndice) :-
+placeAChoisir(P, Plateau, ListeCasesRestantes, IndListeCasesRestantes, NbCasesRestantes, ScoreEtIndice) :-
     nth1(IndListeCasesRestantes, ListeCasesRestantes, IndPiece),
     changerElemListe(IndPiece, P, Plateau, NouveauPlateau),
     score(NouveauPlateau, ScoreActuel),
     IndListeCasesRestantesSuivant is IndListeCasesRestantes+1,
-    placeASelectionner(P,
-                       Plateau,
-                       ListeCasesRestantes,
-                       IndListeCasesRestantesSuivant,
-                       NbCasesRestantes,
-                       ScoreEtIndiceSuivant),
+    placeAChoisir(P, Plateau, ListeCasesRestantes, IndListeCasesRestantesSuivant, NbCasesRestantes, ScoreEtIndiceSuivant),
     bonScoreEtObjet(1, ScoreEtIndiceSuivant, [ScoreActuel, IndPiece], ScoreEtIndice).
 
 
