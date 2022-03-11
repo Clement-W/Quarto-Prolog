@@ -103,7 +103,7 @@ premierEtage(Plateau, ListePiecesRestantes, PieceASelectionner, IndPieceRestante
                  ScorePieceSuivante),
     ScorePieceSuivante<ScorePiece.
 
-%Cas où l'IA doit placer une pièce sélectionner par l'adversaire
+%Cas où l'IA doit placer une pièce sélectionnée par l'adversaire
     % Cas d'arrêt : on arrive au bout du niveau et on remonte le score correspondant au choix de la dernière place possible pour la pièce à placer
 premierEtage(Plateau, PieceAPlacer, IndTeste, ScorePlace, 1, ProfondeurMax) :-
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
