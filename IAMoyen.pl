@@ -2,6 +2,9 @@
 :- ['Utils.pl'].
 
 % IA de niveau moyen
+
+% L'IA sélectionne la pièce la plus mauvaise à jouer selon l'état actuel du plateau,
+% c'est-à-dire la pièce dont le meilleur placement donne la pire évaluation parmi toutes les pièces restantes
 selectionnerPieceIAMoyen(P, Plateau) :-
     listePiecesRestantes(Plateau, ListePiecesRestantes),
     length(ListePiecesRestantes, NbPiecesRestantes),
@@ -13,7 +16,7 @@ selectionnerPieceIAMoyen(P, Plateau) :-
                        NbPiecesRestantes,
                        ListeCasesRestantes).
 
-
+% l'IA trouve le place la pièce P sur le plateau de façon à obtenir le plateau aynat la meilleure évaluation 
 placerPieceIAMoyen(P, Plateau, NouveauPlateau) :-
     listeCasesRestantes(Plateau, [], 1, ListeCasesRestantes),
     nl,

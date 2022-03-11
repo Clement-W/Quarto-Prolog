@@ -70,13 +70,16 @@ evaluerDiagonales(Plateau, ScoreDiagonales) :-
 
 % evaluation est vrai pour chaque alignement de 4 pièces pouvant aboutir à la victoire, et donne un score selon la proximité du cas de victoire
 
-% Cas de victoire
+% Cas de victoire, c'est-à-dire que les 4 pièces alignées ont une caractéristique en commun
 evaluation([X, _, _, _], [X, _, _, _], [X, _, _, _], [X, _, _, _], 1000).
 evaluation([_, X, _, _], [_, X, _, _], [_, X, _, _], [_, X, _, _], 1000).
 evaluation([_, _, X, _], [_, _, X, _], [_, _, X, _], [_, _, X, _], 1000).
 evaluation([_, _, _, X], [_, _, _, X], [_, _, _, X], [_, _, _, X], 1000).
 
-% L'évaluation vaut 3
+% L'évaluation vaut 3, c'est-à-dire que les 4 cases évaluées présentent 3 pièces ayant une caractéristique en commun et un vide
+% Remarque : 3 pièces partageant une caractéristique alignées avec une quatrième sans cette caractéristique vaut 0 point car 
+% cela signifie que l'on ne peut plus placer de pièce sur cette ligne, et donc les 3 pièces ne peuvent plus amener à un cas de victoire
+% ainsi il faut forcément un vide parmi les 4 cases évaluées
 evaluation([X, _, _, _], [X, _, _, _], [X, _, _, _], vide, 3).
 evaluation([X, _, _, _], [X, _, _, _], vide, [X, _, _, _], 3).
 evaluation([X, _, _, _], vide, [X, _, _, _], [X, _, _, _], 3).
@@ -97,7 +100,8 @@ evaluation([_, _, _, X], [_, _, _, X], vide, [_, _, _, X], 3).
 evaluation([_, _, _, X], vide, [_, _, _, X], [_, _, _, X], 3).
 evaluation(vide, [_, _, _, X], [_, _, _, X], [_, _, _, X], 3).
 
-% L'évaluation vaut 2
+% L'évaluation vaut 2, c'est-à-dire que les 4 cases évaluées présentent 2 pièces ayant une caractéristique en commun et 2 vides
+% Remarque : les 2 vides sont nécessaires pour que les 2 pièces partageant une caractéristique puisse aboutir à un cas de victoire
 evaluation([X, _, _, _], [X, _, _, _], vide, vide, 2).
 evaluation([X, _, _, _], vide, [X, _, _, _], vide, 2).
 evaluation(vide, [X, _, _, _], [X, _, _, _], vide, 2).

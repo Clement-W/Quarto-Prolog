@@ -7,19 +7,26 @@ listePiecesRestantes(Plateau, ListePiecesRestantes) :-
     subtract(ListeToutesLesPieces, Plateau, ListePiecesRestantes).
 
 % Retourne la liste des cases restantes sur le plateau dans ListeCasesRestanteComplete
+% Doit toujours être appelé comme suit : listeCasesRestantes(Plateau, [], 1, ListeRetournée)
 % La liste retournée est sous la forme [1,2,3, ... , 16] 
+    % Cas d'arrêt : on arrive à l'étuide de la 16ème case du plateau
+        % la 16ème case est vide et on l'ajoute à la liste des cases restantes
 listeCasesRestantes(Plateau, ListeCasesRestantes, 16, ListeCasesRestantesComplete) :-
     nth1(16, Plateau, vide),
     append(ListeCasesRestantes, [16], ListeCasesRestantesComplete).
 
+        % la 16ème case n'est pas vide
 listeCasesRestantes(_, ListeCasesRestantes, 16, ListeCasesRestantes).
 
+    % Cas général
+        % case vide
 listeCasesRestantes(Plateau, ListeCasesRestantes, Ind, ListeCasesRestantesComplete) :-
     nth1(Ind, Plateau, vide),
     append(ListeCasesRestantes, [Ind], NouvelleListeCasesRestantes),
     Ind2 is Ind+1,
     listeCasesRestantes(Plateau, NouvelleListeCasesRestantes, Ind2, ListeCasesRestantesComplete).
 
+        % case pas vide
 listeCasesRestantes(Plateau, ListeCasesRestantes, Ind, ListeCasesRestantesComplete) :-
     Ind2 is Ind+1,
     listeCasesRestantes(Plateau, ListeCasesRestantes, Ind2, ListeCasesRestantesComplete).
